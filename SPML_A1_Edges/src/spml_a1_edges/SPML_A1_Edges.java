@@ -36,25 +36,28 @@ public class SPML_A1_Edges {
 
         PriorityQueue<Vertex> pq = initializeQueue(g);
 
-        //while (!pq.isEmpty()) {
+        while (!pq.isEmpty()) {
             Vertex u = pq.poll();
             Edge bestEdge = new Edge(' ', ' ', 0);
+            int bestKey = Graph.INF;
             for (Edge e : g.connectedEdges(u)) {
-                
-                Vertex v = e.other(u);
+                Vertex vPrime = e.other(u);
+                Vertex v = g.findVertex(vPrime);
                 int weight = e.getWeight();
                 System.out.println(e);           
-                System.out.println(pq.contains(v));
                 if (pq.contains(v) && weight < v.getKey()) {
-                    System.out.println("test");
                     pq.remove(v);
-                    bestEdge = e;
                     v.setKey(weight);
                     pq.add(v);
+                    
+                    if(v.getKey()<bestKey){
+                        bestKey = v.getKey();
+                        bestEdge = e;
+                    }
                 }
             }
             mst.addEdge(bestEdge);
-        //}
+        }
         return mst;
     }
 
