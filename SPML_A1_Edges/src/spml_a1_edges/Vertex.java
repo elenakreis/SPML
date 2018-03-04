@@ -11,37 +11,31 @@ package spml_a1_edges;
  */
 public class Vertex {
     private int key;
-    private int parent;
-    private final int NR;
+    private final char name;
     
-    public Vertex(int nr, int key, int parent) {
-        this.NR = nr;
+    public Vertex(char name, int key) {
+        this.name = name;
         this.key = key;
-        this.parent = parent;
     }
     
     public void setKey(int newKey) {
         key = newKey;
     }
     
-    public void setParent(int newParent) {
-        parent = newParent;
-    }
-    
     public int getKey() {
         return key;
     }
-    
-    public int getParent() {
-        return parent;
-    }
-    
-    public int getNumber() {
-        return NR;
+
+    public char getName() {
+        return name;
     }
     
     @Override
     public String toString() {
-        return String.format("[%d,%d]",NR,parent);
+        return String.format("[%s, key: %d]",name,key);
+    }
+    
+    public boolean equals(Vertex other){
+        return name == other.name;
     }
 }

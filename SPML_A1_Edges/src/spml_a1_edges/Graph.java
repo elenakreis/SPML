@@ -5,6 +5,7 @@
  */
 package spml_a1_edges;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -13,60 +14,60 @@ import java.util.Arrays;
  */
 public class Graph {
 
-    private final static int INF = 1000000;
+    public final static int INF = 1000000;
     //   private int nrVertices;
-    private int[][] edgeWeights;
-    private Vertex[] vertices;
-    private Vertex root;
+    private final ArrayList<Edge> edges;
+    private final Vertex[] vertices;
     private final static int ROOT = 0;
 
-    public Graph(int nrVertices) {
+    public Graph(int nrVertices, ArrayList<Edge> edges) {
 //        this.nrVertices = nrVertices;
-        this.edgeWeights = new int[nrVertices][nrVertices];
         this.vertices = new Vertex[nrVertices];
+        this.edges = edges;
 
-        int counter = 1;
+        int characterCount = 65;
 
         for (int i = 0; i < vertices.length; i++) {
-            vertices[i] = new Vertex(counter++, INF, -1);
+            vertices[i] = new Vertex((char) characterCount++, INF);
         }
 
         vertices[ROOT].setKey(0);
     }
 
-    public void fillWeights(int[][] newWeights) {
-        this.edgeWeights = newWeights.clone();
-    }
-
-    public int getWeight(int vA, int vB) {
-        return edgeWeights[vA - 1][vB - 1];
-    }
-
-    public boolean hasEdge(int vA, int vB) {
-        return getWeight(vA, vB) >= 0;
-    }
-
-    public int nrVertices() {
-        return edgeWeights.length;
+    public void addEdge(Edge newEdge) {
+        this.edges.add(newEdge);
     }
 
     public Vertex[] getVertices() {
         return vertices;
     }
-
-    public Vertex[] getNeighbours(Vertex u) {
-        Vertex[] neighbours = new Vertex[nrVertices()];
-        int counter = 0;
-        for (Vertex v : vertices) {
-            if (hasEdge(u.getNumber(), v.getNumber())) {
-                neighbours[counter++] = v;
-            }
-        }
-        return neighbours;
+    
+    public int nrVertices() {
+        return vertices.length;
     }
 
     @Override
     public String toString() {
-        return Arrays.toString(vertices);
+        return "Vertices: " + Arrays.toString(vertices) +"\n"
+                + "Edges: " + edges;
+    }
+
+    public ArrayList<Edge> connectedEdges(Vertex u) {
+        ArrayList<Edge> connectedEdges = new ArrayList<Edge>();
+        
+        for (Edge edge : edges) {
+            if(edge.contains(u))
+                connectedEdges.add(edge);
+        }
+        return connectedEdges;  
+    }
+    
+    //remove??
+    private boolean hasEdge(Vertex v, Vertex u) {
+        for (Edge edge : edges) {
+            if(edge.connectsVertices(v,u))
+                return true;
+        }
+        return false;
     }
 }
