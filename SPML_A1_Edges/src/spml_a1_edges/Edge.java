@@ -25,6 +25,7 @@ public class Edge {
         return weight;
     }
     
+    
     public boolean connectsVertices (Vertex v1, Vertex v2){
         return v1.equals(this.v1)&&v2.equals(this.v2)||v1.equals(this.v2)&&v2.equals(this.v1);
     }

@@ -42,8 +42,20 @@ public class Graph {
         return vertices;
     }
     
+    public Vertex getRoot(){
+        return vertices[ROOT];
+    }
+    
     public int nrVertices() {
         return vertices.length;
+    }
+    
+    public int nrEdges(){
+        return edges.size();
+    }
+    
+    public ArrayList<Edge> getEdges(){
+        return edges;
     }
 
     @Override
@@ -69,5 +81,13 @@ public class Graph {
                 return true;
         }
         return false;
+    }
+
+    public Vertex findVertex(Vertex vPrime) {
+        for (Vertex vertex : vertices) {
+            if(vPrime.equals(vertex))
+                return vertex;
+        }
+        return vPrime;
     }
 }
