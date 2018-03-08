@@ -40,8 +40,12 @@ public class Vertex {
         return NR;
     }
     
+    public char getName(int nmb) {
+        return (char)(64+nmb);
+    }
+    
     @Override
     public String toString() {
-        return String.format("[%d,%d]",NR,parent);
+        return String.format("[%s,%s]",getName(NR),getName(parent));
     }
 }

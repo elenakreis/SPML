@@ -32,7 +32,6 @@ public class SPML_A1 {
             {-1,-1,2,-1,-1,-1,6,7,-1}
         };
         graph.fillWeights(weights);	
-        //System.out.println(graph.nrVertices());  
         MST_PRIM(graph);
         System.out.println(graph);
         long endTime   = System.nanoTime();

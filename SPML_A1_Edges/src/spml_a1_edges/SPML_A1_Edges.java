@@ -32,14 +32,15 @@ public class SPML_A1_Edges {
         System.out.println(mst);
     }
 
+    
     private static Graph MST_PRIM(Graph g) {
 
         PriorityQueue<Vertex> unReachSet = initializeQueue(g);
         ArrayList<Vertex> reachSet = new ArrayList<Vertex>();
         Graph mst = new Graph(g.nrVertices(), new ArrayList<Edge>());
 
-        Vertex root = unReachSet.poll();
-        reachSet.add(root);
+        //Vertex root = unReachSet.poll();
+        //reachSet.add(root);
 
         while (!unReachSet.isEmpty()) {
             Vertex x = unReachSet.poll();
@@ -87,6 +88,7 @@ public class SPML_A1_Edges {
         edges.removeAll(remove);
         return edges;
     }
+    
     /*
      private static PriorityQueue<Edge> initializeQueue(Graph g){
      Comparator<Edge> comparator = new EdgeComparator();
@@ -110,21 +112,21 @@ public class SPML_A1_Edges {
      Edge bestEdge = new Edge(' ', ' ', 0);
      int bestKey = Graph.INF;
      for (Edge e : g.connectedEdges(u)) {
-     Vertex vPrime = e.other(u);
-     Vertex v = g.findVertex(vPrime);
-     int weight = e.getWeight();
-     //System.out.println(e);   
-     System.out.println(v);
-     System.out.println(pq.contains(v));
-     if (pq.contains(v) && weight < v.getKey()) {
-     pq.remove(v);
-     v.setKey(weight);
-     pq.add(v);
-     // System.out.println("key of "+ v.getName() +  v.getKey());
-     if(v.getKey()<bestKey){
-     bestKey = v.getKey();
-     System.out.println("Best key: " + v.getName() + "\n");
-     bestEdge = e;
+        Vertex vPrime = e.other(u);
+        Vertex v = g.findVertex(vPrime);
+        int weight = e.getWeight();
+        //System.out.println(e);   
+        System.out.println(v);
+        System.out.println(pq.contains(v));
+        if (pq.contains(v) && weight < v.getKey()) {
+            pq.remove(v);
+            v.setKey(weight);
+            pq.add(v);
+            // System.out.println("key of "+ v.getName() +  v.getKey());
+        if(v.getKey()<bestKey){
+            bestKey = v.getKey();
+            System.out.println("Best key: " + v.getName() + "\n");
+            bestEdge = e;
      }
      }
      }
@@ -134,7 +136,8 @@ public class SPML_A1_Edges {
      }
      return mst;
      }
-     */
+    */
+    
     private static PriorityQueue<Vertex> initializeQueue(Graph g) {
         Comparator<Vertex> comparator = new VertexComparator();
         PriorityQueue<Vertex> pq = new PriorityQueue<>(g.nrVertices(), comparator);
@@ -142,7 +145,7 @@ public class SPML_A1_Edges {
         pq.addAll(Arrays.asList(g.getVertices()));
         return pq;
     }
-
+    
     private static ArrayList<Edge> initializeEdges() {
         ArrayList<Edge> edges = new ArrayList<Edge>();
         edges.add(new Edge('A', 'B', 4));

@@ -83,6 +83,16 @@ public class Graph {
         return false;
     }
 
+    /*
+    public Vertex findVertex(Vertex vPrime) {
+        for (Vertex vertex : vertices) {
+            if(vPrime.equals(vertex))
+                return vertex;
+        }
+        return vPrime;
+    }
+*/
+
     public Vertex findVertex(Vertex vPrime) {
         for (Vertex vertex : vertices) {
             if(vPrime.equals(vertex))
