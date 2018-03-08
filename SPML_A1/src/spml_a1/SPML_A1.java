@@ -14,11 +14,12 @@ import java.util.PriorityQueue;
  * @author Eier
  */
 public class SPML_A1 {
+    static int EDGE_COUNTER = 0;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        long startTime = System.nanoTime();
+        long startTime = System.currentTimeMillis();
         Graph graph = new Graph(9);
         int [][] weights = {
             {-1,4,-1,-1,-1,-1,-1,8,-1},
@@ -34,10 +35,11 @@ public class SPML_A1 {
         graph.fillWeights(weights);	
         MST_PRIM(graph);
         System.out.println(graph);
-        long endTime   = System.nanoTime();
+        long endTime   = System.currentTimeMillis();
         long totalTime = endTime - startTime;
         
-        System.out.println("Runtime in nanoseconds: " + totalTime);
+        System.out.println("Number of times an edge was considered: " + EDGE_COUNTER);
+        System.out.println("Runtime in milliseconds: " + totalTime);
     }
     
     private static void MST_PRIM(Graph g) {
@@ -51,6 +53,7 @@ public class SPML_A1 {
                 v.setParent(u.getNumber());                    
                 v.setKey(weight);
                 pq.add(v);
+                EDGE_COUNTER++;
                 }                
             }
         }
