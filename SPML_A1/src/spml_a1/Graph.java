@@ -5,6 +5,7 @@
  */
 package spml_a1;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -14,19 +15,16 @@ import java.util.Arrays;
 public class Graph {
 
     private final static int INF = 1000000;
-    //   private int nrVertices;
     private int[][] edgeWeights;
     private Vertex[] vertices;
     private Vertex root;
     private final static int ROOT = 0;
 
     public Graph(int nrVertices) {
-//        this.nrVertices = nrVertices;
         this.edgeWeights = new int[nrVertices][nrVertices];
         this.vertices = new Vertex[nrVertices];
 
         int counter = 1;
-
         for (int i = 0; i < vertices.length; i++) {
             vertices[i] = new Vertex(counter++, INF, -1);
         }
@@ -54,12 +52,11 @@ public class Graph {
         return vertices;
     }
 
-    public Vertex[] getNeighbours(Vertex u) {
-        Vertex[] neighbours = new Vertex[nrVertices()];
-        int counter = 0;
+    public ArrayList<Vertex> getNeighbours(Vertex u) {
+        ArrayList<Vertex> neighbours = new ArrayList<>();
         for (Vertex v : vertices) {
             if (hasEdge(u.getNumber(), v.getNumber())) {
-                neighbours[counter++] = v;
+                neighbours.add(v);
             }
         }
         return neighbours;

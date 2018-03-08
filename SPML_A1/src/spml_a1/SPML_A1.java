@@ -45,15 +45,13 @@ public class SPML_A1 {
         while(!pq.isEmpty()) {
             Vertex u = pq.poll();
             for(Vertex v:g.getNeighbours(u)){
-                if(v != null){
-                    int weight = g.getWeight(u.getNumber(), v.getNumber());
-                    if(pq.contains(v) && weight < v.getKey()) { 
-                        pq.remove(v);
-                        v.setParent(u.getNumber());                    
-                        v.setKey(weight);
-                        pq.add(v);
-                    }
-                }
+                int weight = g.getWeight(u.getNumber(), v.getNumber());
+                if(pq.contains(v) && weight < v.getKey()) { 
+                pq.remove(v);
+                v.setParent(u.getNumber());                    
+                v.setKey(weight);
+                pq.add(v);
+                }                
             }
         }
     }
