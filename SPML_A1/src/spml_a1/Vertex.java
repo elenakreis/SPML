@@ -41,6 +41,8 @@ public class Vertex {
     }
     
     public char getName(int nmb) {
+        if(nmb == -1)
+            return '\u0000';
         return (char)(64+nmb);
     }
     
