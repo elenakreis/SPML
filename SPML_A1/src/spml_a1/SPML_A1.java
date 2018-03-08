@@ -18,6 +18,7 @@ public class SPML_A1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        long startTime = System.nanoTime();
         Graph graph = new Graph(9);
         int [][] weights = {
             {-1,4,-1,-1,-1,-1,-1,8,-1},
@@ -34,6 +35,10 @@ public class SPML_A1 {
         //System.out.println(graph.nrVertices());  
         MST_PRIM(graph);
         System.out.println(graph);
+        long endTime   = System.nanoTime();
+        long totalTime = endTime - startTime;
+        
+        System.out.println("Runtime in nanoseconds: " + totalTime);
     }
     
     private static void MST_PRIM(Graph g) {
