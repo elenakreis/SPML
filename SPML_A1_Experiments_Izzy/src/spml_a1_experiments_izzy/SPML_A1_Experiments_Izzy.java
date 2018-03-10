@@ -8,6 +8,7 @@ package spml_a1_experiments_izzy;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Random;
 
 /**
  *
@@ -15,29 +16,23 @@ import java.util.PriorityQueue;
  */
 public class SPML_A1_Experiments_Izzy {
     static int EDGE_COUNTER = 0;
+
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        Graph graph = new Graph(9);
-        int [][] weights = {
-            {-1,4,-1,-1,-1,-1,-1,8,-1},
-            {4,-1,8,-1,-1,-1,-1,11,-1},
-            {-1,8,-1,7,-1,4,-1,-1,2},
-            {-1,-1,7,-1,9,14,-1,-1,-1},
-            {-1,-1,-1,9,-1,10,-1,-1,-1},
-            {-1,-1,4,14,10,-1,2,-1,-1},
-            {-1,-1,-1,-1,-1,2,-1,1,6},
-            {8,11,-1,-1,-1,-1,1,-1,7},
-            {-1,-1,2,-1,-1,-1,6,7,-1}
-        };
-        graph.fillWeights(weights);	
+        //printArray(randomWeights(9, 8, 1, 10));
+        
+        int nrVertices = 9;
+        Graph graph = new Graph(nrVertices);
+        graph.fillWeights(randomWeights(nrVertices, 8, 1, 10));
         MST_PRIM(graph);
         System.out.println(graph);
-        long endTime   = System.currentTimeMillis();
+        long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
-        
+
         System.out.println("Number of times an edge was considered: " + EDGE_COUNTER);
         System.out.println("Runtime in milliseconds: " + totalTime);
     }
@@ -65,5 +60,52 @@ public class SPML_A1_Experiments_Izzy {
         
         pq.addAll(Arrays.asList(g.getVertices()));
         return pq;
+    }
+    
+    private static int[][] randomWeights(int nrVertices, int nrEdges, int low, int high) {
+        int[][] randomWeights = new int[nrVertices][nrVertices];
+        Random ran = new Random();
+        
+        int rWeight = low + ran.nextInt(high - low);
+        randomWeights[0][1] = rWeight;
+        randomWeights[1][0] = rWeight;
+            //connect v0 to v1 with a random weight
+
+        for (int i = 2; i < nrVertices; i++) {  //create minimum tree
+            rWeight = low + ran.nextInt(high - low); //generate random weight
+            int randomIndex = ran.nextInt(i);   //choose one of the vertices in the tree randomly
+            randomWeights[i][randomIndex] = rWeight;    
+            randomWeights[randomIndex][i] = rWeight;
+        }
+        for (int i = 0; i < nrEdges-(nrVertices-1); i++) { //add remaining edges INDEX CORRECT???
+            int x,y;
+            do {
+                x = ran.nextInt(nrVertices);
+                y = ran.nextInt(nrVertices);
+            } while (x == y || randomWeights[x][y]!=0); 
+                    //generate random spot (not on diagonal and not already filled)
+            rWeight = low + ran.nextInt(high - low);
+            randomWeights[x][y]= rWeight;
+            randomWeights[y][x]= rWeight; 
+        }
+        
+        for(int row = 0; row < nrVertices; row++){
+            for(int col = 0; col < nrVertices; col++){
+                if(randomWeights[row][col]==0){
+                    randomWeights[row][col]=-1;
+                    randomWeights[col][row]=-1;
+                }
+            }
+        }
+        return randomWeights;
+    }
+    
+    private static void printArray (int[][]weights){
+        for (int i = 0; i < weights.length; i++) {
+            for (int j = 0; j < weights.length; j++) {
+                System.out.print(weights[i][j]+" ");    
+            }       
+            System.out.println();
+        }
     }
 }
