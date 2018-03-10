@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package spml_a1_experiments_elena;
+package spml_a1;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -13,29 +12,21 @@ import java.util.Random;
 
 /**
  *
- * @author Eier
+ * @author Elena
  */
-public class SPML_A1_Experiments_Elena {
+public class MST_PRIM {
 
-    static int EDGE_COUNTER = 0;
+    public static int EDGE_COUNTER = 0;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        long startTime = System.currentTimeMillis();
-        //printArray(randomWeights(5, 8, 1, 10));
-        
+    public MST_PRIM() {
         int nrVertices = 9;
+        int nrEdges = 8;
         Graph graph = new Graph(nrVertices);
-        graph.fillWeights(randomWeights(nrVertices, 8, 1, 10));
+        int[][] weights = randomWeights(nrVertices, nrEdges, 1, 10);
+        printArray(weights);
+        graph.fillWeights(weights);
         MST_PRIM(graph);
         System.out.println(graph);
-        long endTime = System.currentTimeMillis();
-        long totalTime = endTime - startTime;
-
-        System.out.println("Number of times an edge was considered: " + EDGE_COUNTER);
-        System.out.println("Runtime in milliseconds: " + totalTime);
     }
 
     private static void MST_PRIM(Graph g) {
@@ -64,43 +55,45 @@ public class SPML_A1_Experiments_Elena {
     }
 
     private static int[][] randomWeights(int nrVertices, int nrEdges, int low, int high) {
-        int[][] randomWeights = fillArray(nrVertices);
+        int[][] randomWeights = new int[nrVertices][nrVertices]; // = fillArray(nrVertices);
         Random ran = new Random();
-        
+
         int rWeight = low + ran.nextInt(high - low);
         randomWeights[0][1] = rWeight;
         randomWeights[1][0] = rWeight;
-            //connect v0 to v1 with a random weight
+        //connect v0 to v1 with a random weight
 
         for (int i = 2; i < nrVertices; i++) {  //create minimum tree
             rWeight = low + ran.nextInt(high - low); //generate random weight
             int randomIndex = ran.nextInt(i);   //choose one of the vertices in the tree randomly
-            randomWeights[i][randomIndex] = rWeight;    
+            randomWeights[i][randomIndex] = rWeight;
             randomWeights[randomIndex][i] = rWeight;
         }
-        for (int i = 0; i < nrEdges-(nrVertices-1); i++) { //add remaining edges INDEX CORRECT???
-            int x,y;
+        for (int i = 0; i < nrEdges - (nrVertices - 1); i++) { //add remaining edges INDEX CORRECT???
+            int x, y;
             do {
                 x = ran.nextInt(nrVertices);
                 y = ran.nextInt(nrVertices);
-            } while (x == y || randomWeights[x][y]!=-1); 
-                    //generate random spot (not on diagonal and not already filled)
+            } while (x == y || randomWeights[x][y] != 0);
+            //generate random spot (not on diagonal and not already filled)
             rWeight = low + ran.nextInt(high - low);
-            randomWeights[x][y]= rWeight;
-            randomWeights[y][x]= rWeight; 
+            randomWeights[x][y] = rWeight;
+            randomWeights[y][x] = rWeight;
         }
         return randomWeights;
     }
-    
-    private static void printArray (int[][]weights){
+
+    private static void printArray(int[][] weights) {
         for (int i = 0; i < weights.length; i++) {
             for (int j = 0; j < weights.length; j++) {
-                System.out.print(weights[i][j]+" ");    
-            }       
+                System.out.print(weights[i][j] + " ");
+            }
             System.out.println();
         }
     }
 
+    //only need this if we work with -1 weights.
+    /* 
     private static int[][] fillArray(int nrVertices) {
         int[][] emptyArray = new int[nrVertices][nrVertices];
         for (int i = 0; i < nrVertices; i++) {
@@ -110,4 +103,5 @@ public class SPML_A1_Experiments_Elena {
         }
         return emptyArray;
     }
+     */
 }

@@ -16,8 +16,7 @@ public class Graph {
 
     private final static int INF = 1000000;
     private int[][] edgeWeights;
-    private Vertex[] vertices;
-    private Vertex root;
+    private final Vertex[] vertices;
     private final static int ROOT = 0;
 
     public Graph(int nrVertices) {
@@ -41,7 +40,7 @@ public class Graph {
     }
 
     public boolean hasEdge(int vA, int vB) {
-        return getWeight(vA, vB) >= 0;
+        return getWeight(vA, vB) > 0;
     }
 
     public int nrVertices() {

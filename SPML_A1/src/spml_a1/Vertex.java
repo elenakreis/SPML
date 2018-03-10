@@ -40,10 +40,10 @@ public class Vertex {
         return NR;
     }
     
-    public char getName(int nmb) {
-        if(nmb == -1)
+    private char getName(int nr) {
+        if(nr == -1)
             return '\u0000';
-        return (char)(64+nmb);
+        return (char)(64+nr);
     }
     
     @Override
