@@ -17,16 +17,17 @@ import java.util.Random;
 public class SPML_A1_Experiments_Izzy {
     static int EDGE_COUNTER = 0;
 
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        printArray(randomWeights(5, 8, 1, 10));
+        //printArray(randomWeights(9, 8, 1, 10));
         
-        Graph graph = new Graph(5);
-        
-        graph.fillWeights(randomWeights(5, 8, 1, 10));
+        int nrVertices = 9;
+        Graph graph = new Graph(nrVertices);
+        graph.fillWeights(randomWeights(nrVertices, 8, 1, 10));
         MST_PRIM(graph);
         System.out.println(graph);
         long endTime = System.currentTimeMillis();

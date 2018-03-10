@@ -22,11 +22,11 @@ public class SPML_A1 {
      */
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        printArray(randomWeights(5, 8, 1, 10));
+        //printArray(randomWeights(5, 8, 1, 10));
         
-        Graph graph = new Graph(5);
-        
-        graph.fillWeights(randomWeights(5, 8, 1, 10));
+        int nrVertices = 9;
+        Graph graph = new Graph(nrVertices);
+        graph.fillWeights(randomWeights(nrVertices, 8, 1, 10));
         MST_PRIM(graph);
         System.out.println(graph);
         long endTime = System.currentTimeMillis();
