@@ -18,11 +18,11 @@ public class SPML_A1 {
         long startTime = System.currentTimeMillis();
         //printArray(randomWeights(5, 8, 1, 10));
         
-        MST_PRIM mst = new MST_PRIM();
+        MST_Prim mst = new MST_Prim();
         
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
-        System.out.println("Number of times an edge was considered: " + MST_PRIM.EDGE_COUNTER);
+        System.out.println("Number of times an edge was considered: " + MST_Prim.EDGE_COUNTER);
         System.out.println("Runtime in milliseconds: " + totalTime);
     }
 }
