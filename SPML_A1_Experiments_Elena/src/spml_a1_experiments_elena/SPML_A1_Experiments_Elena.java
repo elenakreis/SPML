@@ -89,15 +89,6 @@ public class SPML_A1_Experiments_Elena {
             randomWeights[x][y]= rWeight;
             randomWeights[y][x]= rWeight; 
         }
-        System.out.println("done");
-        for(int row = 0; row < nrVertices; row++){
-            for(int col = 0; col < nrVertices; col++){
-                if(randomWeights[row][col]==0){
-                    randomWeights[row][col]=-1;
-                    randomWeights[col][row]=-1;
-                }
-            }
-        }
         return randomWeights;
     }
     
