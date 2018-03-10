@@ -74,7 +74,7 @@ public class SPML_A1_Experiments_Elena {
     }
 
     private static int[][] randomWeights(int nrVertices, int nrEdges, int low, int high) {
-        int[][] randomWeights = new int[nrVertices][nrVertices];
+        int[][] randomWeights = fillArray(nrVertices);
         Random ran = new Random();
         
         int rWeight = low + ran.nextInt(high - low);
@@ -88,21 +88,17 @@ public class SPML_A1_Experiments_Elena {
             randomWeights[i][randomIndex] = rWeight;    
             randomWeights[randomIndex][i] = rWeight;
         }
-        System.out.println("done with tree");
         for (int i = 0; i < nrEdges-(nrVertices-1); i++) { //add remaining edges INDEX CORRECT???
-            System.out.println("test");
             int x,y;
             do {
                 x = ran.nextInt(nrVertices);
                 y = ran.nextInt(nrVertices);
-                System.out.println("stuck");
-            } while (x == y || randomWeights[x][y]!=0); 
+            } while (x == y || randomWeights[x][y]!=-1); 
                     //generate random spot (not on diagonal and not already filled)
             rWeight = low + ran.nextInt(high - low);
             randomWeights[x][y]= rWeight;
             randomWeights[y][x]= rWeight; 
         }
-        System.out.println("done");
         return randomWeights;
     }
     
@@ -113,5 +109,15 @@ public class SPML_A1_Experiments_Elena {
             }       
             System.out.println();
         }
+    }
+
+    private static int[][] fillArray(int nrVertices) {
+        int[][] emptyArray = new int[nrVertices][nrVertices];
+        for (int i = 0; i < nrVertices; i++) {
+            for (int j = 0; j < nrVertices; j++) {
+                emptyArray[i][j] = -1;
+            }       
+        }
+        return emptyArray;
     }
 }
