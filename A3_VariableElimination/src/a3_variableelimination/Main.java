@@ -6,8 +6,8 @@
 package a3_variableelimination;
 
 /**
- *
- * @author Elena
+ * @author Isabel Burgos s4718321
+ * @author Elena Kreis s4841670
  */
 public class Main {
 
@@ -15,7 +15,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        System.out.println("Leggooo");
     }
     
 }
