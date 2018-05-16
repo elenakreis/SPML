@@ -1,4 +1,4 @@
-package spml_a1;
+package a1_MST;
 
 
 import java.util.Comparator;

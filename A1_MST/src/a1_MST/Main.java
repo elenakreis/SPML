@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package spml_a1;
+package a1_MST;
 
 /**
  *
  * @author Eier
  */
-public class SPML_A1 {
+public class Main {
 
     /**
      * @param args the command line arguments

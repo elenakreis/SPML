@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package spml_a1_experiments_izzy;
+package a1_MST;
 
 /**
  *
@@ -40,10 +40,10 @@ public class Vertex {
         return NR;
     }
     
-    public char getName(int nmb) {
-        if(nmb == -1)
+    private char getName(int nr) {
+        if(nr == -1)
             return '\u0000';
-        return (char)(64+nmb);
+        return (char)(64+nr);
     }
     
     @Override

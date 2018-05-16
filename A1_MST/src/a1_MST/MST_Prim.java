@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package spml_a1;
+package a1_MST;
 
 import java.util.Arrays;
 import java.util.Comparator;
