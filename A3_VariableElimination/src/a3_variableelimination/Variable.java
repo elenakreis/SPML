@@ -19,7 +19,7 @@ public class Variable {
 	/**
 	 * Constructor of the class.
 	 * @param name, name of the variable.
-	 * @param value, the value of the variable.
+	 * @param values, the value of the variable.
 	 */
 	public Variable(String name, ArrayList<String> values) {
 		this.name = name;
@@ -52,7 +52,7 @@ public class Variable {
 
 	/** 
 	 * Setter of the value.
-	 * @param value to which the value of the variable should be set.
+	 * @param s to which the value of the variable should be set.
 	 */
 	public void setValue(String s) {
 		this.value = s;
@@ -84,7 +84,7 @@ public class Variable {
 	
 	/**
 	 * Setter of the parents.
-	 * @param the list of parents of the variable.
+	 * @param parents the list of parents of the variable.
 	 */
 	public void setParents(ArrayList<Variable> parents) {
 		this.parents = parents;
@@ -110,7 +110,7 @@ public class Variable {
 
 	/**
 	 * Setter for the observation of a variable.
-	 * @param a boolean denoting if the variable is observed or not.
+	 * @param b boolean denoting if the variable is observed or not.
 	 */
 	public void setObserved(boolean b) {
 		this.observed = b;
@@ -123,4 +123,17 @@ public class Variable {
 	public boolean getObserved() {
 		return observed;
 	}
+        
+        @Override
+        public String toString(){
+            return name+", "+value;
+        }
+        
+        @Override
+        public boolean equals(Object o){
+            if(o.getClass()==this.getClass())
+                return ((Variable) o).getName().equals(this.getName());
+            else 
+                return false;                
+        }
 }

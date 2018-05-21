@@ -372,8 +372,8 @@ public class Networkreader {
 	/**
 	 * Print the network that was read-in (by printing the variables, parents and probabilities).
 	 * 
-	 * @param The list of variables.
-	 * @param The list of probabilities.
+	 * @param Vs The list of variables.
+	 * @param Ps The list of probabilities.
 	 */
 	public void printNetwork(ArrayList<Variable> Vs, ArrayList<Table> Ps) {
 		System.out.println("The variables:");
