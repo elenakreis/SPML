@@ -126,7 +126,7 @@ public class Variable {
         
         @Override
         public String toString(){
-            return name+", "+value;
+            return name;
         }
         
         @Override

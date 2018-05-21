@@ -41,22 +41,41 @@ public class Main {
         reader.printQueryAndObserved(Q, O);
 
         //PUT YOUR CODE FOR THE VARIABLE ELIMINATION ALGORITHM HERE
-        varelAlgorithm(Vs, Ps, Q, O);
+        Table distribution = varelAlgorithm(Vs, Ps, Q, O);
+        System.out.println("DONE");
+        System.out.println(distribution);
     }
 
-    static void varelAlgorithm(ArrayList<Variable> Vs, ArrayList<Table> factors, Variable Q, ArrayList<Variable> O) {
+    private static Table varelAlgorithm(ArrayList<Variable> Vs, ArrayList<Table> factors, Variable Q, ArrayList<Variable> O) {
         // a) done
         // b) done
         // c) done
         // d) factorizing done;
         //    todo: reduce observed variables
         reduceObserved(O, factors);
-        
+
         // e)
         ArrayList<Variable> elimOrder = eliminationOrder(Vs, Q);
-        
+
         // f)
         eliminateVariables(elimOrder, factors);
+
+        // g) 
+        multiplyFactors(factors, Q, factors); // multiply factors with only query; can we use this?
+        Table distribution = normalize(factors);
+        return distribution;
+    }
+
+    private static Table normalize(ArrayList<Table> factors) {
+        Table finalFactor = factors.get(0);
+        double marginal = 0;
+        for (ProbRow row : finalFactor.getTable()) { // calculate marginal
+            marginal += row.getProb();
+        }
+        for (ProbRow row : finalFactor.getTable()) { // normalize
+            row.setProb(row.getProb() / marginal);
+        }
+        return finalFactor;
     }
 
     private static void eliminateVariables(ArrayList<Variable> elimOrder, ArrayList<Table> factors) {
@@ -68,35 +87,34 @@ public class Main {
                 }
             }
             // a)
-            if (zFactors.size() > 1) { 
+            if (zFactors.size() > 1) {
+                // only multiply if theres more than one factor
                 multiplyFactors(zFactors, z, factors);
             }
             // b) 
             Table newFactor = zFactors.get(0); // the only one left
             int zIndex = getColIndex(newFactor, z);
             for (ProbRow row : newFactor.getTable()) { // remove the column with z
-                row.getValues().remove(zIndex); 
+                row.getValues().remove(zIndex);
             }
             ArrayList<ProbRow> remove = new ArrayList<>();
             for (ProbRow row : newFactor.getTable()) {
                 for (ProbRow row2 : newFactor.getTable()) {
-                    if(!row.equals(row2)){
-                        if(row.getValues().equals(row2.getValues())){ //implement this equals
-                            row.setProb(row.getProb()+row2.getProb());
+                    if (!row.equals(row2)) {
+                        if (row.getValues().equals(row2.getValues())) { //implement this equals
+                            row.setProb(row.getProb() + row2.getProb());
                             remove.add(row2);
                         }
                     }
                 }
             }
             newFactor.getTable().removeAll(remove); // remove duplicate rows
-            
-            
-            
+
+            // c) is already done
         }
     }
 
     private static void multiplyFactors(ArrayList<Table> zFactors, Variable z, ArrayList<Table> factors) {
-        // only multiply if theres more than one factor
         Table biggest = zFactors.get(0);
         for (Table zFactor : zFactors) { // find the biggest table
             if (zFactor.size() > biggest.size()) {
@@ -104,7 +122,7 @@ public class Main {
             }
         }
         int zIndex = getColIndex(biggest, z);
-        
+
         for (ProbRow row : biggest.getTable()) {
             String zValue = row.getValues().get(zIndex);
             double prob = row.getProb();
@@ -120,10 +138,10 @@ public class Main {
                 }
             }
             row.setProb(prob);
-        }            
+        }
         ArrayList<Table> remove = new ArrayList<>();
         for (Table zFactor : zFactors) {
-            if(!zFactor.equals(biggest)){
+            if (!zFactor.equals(biggest)) {
                 remove.add(zFactor);
             }
         }
@@ -170,7 +188,6 @@ public class Main {
                 elimOrder.add(v); // add top nodes
             }
         }
-        System.out.println(parents);
         for (Variable v : Vs) {
             if (!parents.contains(v) && !v.equals(Q)) { //make sure you dont add the query variable
                 elimOrder.add(0, v);     // add leaf nodes at front of list

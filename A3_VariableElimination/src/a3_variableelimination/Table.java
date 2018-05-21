@@ -70,4 +70,16 @@ public class Table {
 	public int size() {
 		return table.size();
 	}
+        
+        @Override
+        public String toString(){
+            StringBuilder sb = new StringBuilder();
+            sb.append(node);
+            for (ProbRow row : table) {
+                sb.append("wat");
+                sb.append(row).append("\n");
+            }
+            return sb.toString();
+        }
+
 }
