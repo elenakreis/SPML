@@ -48,8 +48,90 @@ public class Main {
         // a) done
         // b) done
         // c) done
-        // d) factorizing done; 
+        // d) factorizing done;
         //    todo: reduce observed variables
+        reduceObserved(O, factors);
+        
+        // e)
+        ArrayList<Variable> elimOrder = eliminationOrder(Vs, Q);
+        
+        // f)
+        eliminateVariables(elimOrder, factors);
+    }
+
+    private static void eliminateVariables(ArrayList<Variable> elimOrder, ArrayList<Table> factors) {
+        for (Variable z : elimOrder) {
+            ArrayList<Table> zFactors = new ArrayList<>(); // list of factors that contain z
+            for (Table factor : factors) {
+                if (factor.getNode().equals(z) || factor.getParents().contains(z)) {
+                    zFactors.add(factor);
+                }
+            }
+            // a)
+            if (zFactors.size() > 1) { 
+                multiplyFactors(zFactors, z, factors);
+            }
+            // b) 
+            Table newFactor = zFactors.get(0); // the only one left
+            int zIndex = getColIndex(newFactor, z);
+            for (ProbRow row : newFactor.getTable()) { // remove the column with z
+                row.getValues().remove(zIndex); 
+            }
+            ArrayList<ProbRow> remove = new ArrayList<>();
+            for (ProbRow row : newFactor.getTable()) {
+                for (ProbRow row2 : newFactor.getTable()) {
+                    if(!row.equals(row2)){
+                        if(row.getValues().equals(row2.getValues())){ //implement this equals
+                            row.setProb(row.getProb()+row2.getProb());
+                            remove.add(row2);
+                        }
+                    }
+                }
+            }
+            newFactor.getTable().removeAll(remove); // remove duplicate rows
+            
+            
+            
+        }
+    }
+
+    private static void multiplyFactors(ArrayList<Table> zFactors, Variable z, ArrayList<Table> factors) {
+        // only multiply if theres more than one factor
+        Table biggest = zFactors.get(0);
+        for (Table zFactor : zFactors) { // find the biggest table
+            if (zFactor.size() > biggest.size()) {
+                biggest = zFactor;
+            }
+        }
+        int zIndex = getColIndex(biggest, z);
+        
+        for (ProbRow row : biggest.getTable()) {
+            String zValue = row.getValues().get(zIndex);
+            double prob = row.getProb();
+            for (Table zFactor : zFactors) {
+                if (!zFactor.equals(biggest)) { // does equal work for tables??
+                    int zIndex2 = getColIndex(zFactor, z);
+                    for (ProbRow row2 : zFactor.getTable()) {
+                        if (row2.getValues().get(zIndex2).equals(zValue)) {
+                            prob *= row2.getProb();
+                            break; // other tables might be large too??
+                        }
+                    }
+                }
+            }
+            row.setProb(prob);
+        }            
+        ArrayList<Table> remove = new ArrayList<>();
+        for (Table zFactor : zFactors) {
+            if(!zFactor.equals(biggest)){
+                remove.add(zFactor);
+            }
+        }
+        factors.removeAll(remove);
+        zFactors.removeAll(remove);
+    }
+
+    private static void reduceObserved(ArrayList<Variable> O, ArrayList<Table> factors) {
         if (O.size() > 0) {
             for (Variable o : O) {
                 for (Table f : factors) {
@@ -76,11 +158,11 @@ public class Main {
                 }
             }
         }
+    }
 
-        // e)
+    private static ArrayList<Variable> eliminationOrder(ArrayList<Variable> Vs, Variable Q) {
         ArrayList<Variable> elimOrder = new ArrayList<>();
         ArrayList<Variable> parents = new ArrayList<>(); // make set?
-
         for (Variable v : Vs) {     // get a list of parents
             if (v.hasParents()) {
                 parents.addAll(v.getParents());
@@ -99,27 +181,16 @@ public class Main {
                 elimOrder.add(v);       // add remaining nodes (exc. query)
             }
         }
+        return elimOrder;
+    }
 
-        // f)
-        for (Variable z : elimOrder) {
-            ArrayList<Table> zFactors = new ArrayList<>(); // list of factors that contain z
-            for (Table factor : factors) {
-                if (factor.getNode().equals(z) || factor.getParents().contains(z)) {
-                    zFactors.add(factor);
-                }
-            }
-            // a)
-            if (zFactors.size() > 1) { // only multiply if theres more than one factor
-                Table biggest = zFactors.get(0);
-                for (Table zFactor : zFactors) { // find the biggest table
-                    if (zFactor.size() > biggest.size()) {
-                        biggest = zFactor;
-                    }
-                }
-                for (ProbRow row : biggest.getTable()) {
-                    
-                }
-            }
+    private static int getColIndex(Table table, Variable z) {
+        int zIndex;
+        if (table.getNode().equals(z)) {
+            zIndex = table.getNrParents();
+        } else {
+            zIndex = table.getParents().indexOf(z);
         }
+        return zIndex;
     }
 }

@@ -49,6 +49,10 @@ public class Table {
 	public ArrayList<Variable> getParents() {
 		return parents;
 	}
+        
+        public int getNrParents(){
+            return parents.size();
+        }
 
 	/**
 	  * Gets the i'th element from the ArrayList of ProbRows
