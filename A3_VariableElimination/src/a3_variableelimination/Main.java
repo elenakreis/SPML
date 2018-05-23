@@ -42,8 +42,8 @@ public class Main {
 
         //PUT YOUR CODE FOR THE VARIABLE ELIMINATION ALGORITHM HERE
         Table distribution = varelAlgorithm(Vs, Ps, Q, O);
-        //System.out.println("DONE");
-        //System.out.println(distribution);
+        System.out.println("DONE");
+        System.out.println(distribution);
     }
 
     private static Table varelAlgorithm(ArrayList<Variable> Vs, ArrayList<Table> factors, Variable Q, ArrayList<Variable> O) {
@@ -56,6 +56,7 @@ public class Main {
 
         // e)
         ArrayList<Variable> elimOrder = eliminationOrder(Vs, Q); // works
+        
 
         // f)
         eliminateVariables(elimOrder, factors);
@@ -82,12 +83,14 @@ public class Main {
 
     private static void eliminateVariables(ArrayList<Variable> elimOrder, ArrayList<Table> factors) {
         for (Variable z : elimOrder) {
+            System.out.println("z = " + z);
             ArrayList<Table> zFactors = new ArrayList<>(); // list of factors that contain z
             for (Table factor : factors) {
                 if (factor.getNode().equals(z) || factor.getParents().contains(z)) {
                     zFactors.add(factor);
                 }
             }
+            System.out.println("zFactors = " + zFactors);
             // a)
             if (zFactors.size() > 1) {
                 // only multiply if theres more than one factor
@@ -95,26 +98,33 @@ public class Main {
             }
             // b) 
             Table sumFactor = zFactors.get(0); // the only one left
+            System.out.println("sumFactor = " + sumFactor);
             int zIndex = getColIndex(sumFactor, z);
             final int nrParents = sumFactor.getNrParents();
             if (nrParents > 0) { // otherwise the table need not be summed out
-                System.out.println("Only table containing " + z + ":\n" + sumFactor);
                 for (ProbRow row : sumFactor.getTable()) { // remove the column with z
                     row.getValues().remove(zIndex);
                 }
-                System.out.println("\nTable when " + z + " is removed:\n" + sumFactor);
-                ArrayList<ProbRow> remove = new ArrayList<>();
+                System.out.println("Only table containing " + z + ":\n" + sumFactor);
+                ArrayList<ProbRow> newRows = new ArrayList<>();
+                ArrayList<ProbRow> visited = new ArrayList<>();
                 for (ProbRow row : sumFactor.getTable()) {
                     for (ProbRow row2 : sumFactor.getTable()) {
-                        if (!row.equals(row2)) {
-                            if (myEquals(row.getValues(), row2.getValues())) {
+                        if (!row.equals(row2)) { // make sure it is not summing with the row itself
+                            if (myEquals(row.getValues(),row2.getValues())&&!(visited.contains(row)||visited.contains(row2))) {
                                 row.setProb(row.getProb() + row2.getProb());
-                                remove.add(row2);
+                                newRows.add(row);
+                                
+                                visited.add(row);
+                                visited.add(row2);
                             }
                         }
                     }
                 }
-                sumFactor.getTable().removeAll(remove); // remove duplicate rows
+                sumFactor.getTable().removeAll(visited); // remove all
+                sumFactor.getTable().addAll(newRows);
+                System.out.println("\nTable when " + z + " is removed:\n" + sumFactor);
+                
                 Variable newNode;
                 ArrayList<Variable> newParents;
                 if (zIndex == nrParents) { // we removed the node
@@ -131,6 +141,8 @@ public class Main {
                 Table newFactor = new Table(sumFactor.getTable(), newNode, newParents);
                 factors.add(newFactor);
                 factors.remove(sumFactor);
+                //System.out.println("FACTORS");
+                //System.out.println(factors);
             }
         }
     }
@@ -138,7 +150,7 @@ public class Main {
     private static void multiplyFactors(ArrayList<Table> zFactors, Variable z, ArrayList<Table> factors) {
         Table biggest = zFactors.get(0);
         for (Table zFactor : zFactors) { // find the biggest table
-            if (zFactor.size() > biggest.size()) {
+            if (zFactor.getNrParents() > biggest.getNrParents()) {
                 biggest = zFactor;
             }
         }
