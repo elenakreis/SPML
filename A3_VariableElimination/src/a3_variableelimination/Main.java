@@ -42,8 +42,8 @@ public class Main {
 
         //PUT YOUR CODE FOR THE VARIABLE ELIMINATION ALGORITHM HERE
         Table distribution = varelAlgorithm(Vs, Ps, Q, O);
-        System.out.println("DONE");
-        System.out.println(distribution);
+        //System.out.println("DONE");
+        //System.out.println(distribution);
     }
 
     private static Table varelAlgorithm(ArrayList<Variable> Vs, ArrayList<Table> factors, Variable Q, ArrayList<Variable> O) {
@@ -59,8 +59,8 @@ public class Main {
 
         // f)
         eliminateVariables(elimOrder, factors);
-        System.out.println("eliminate done");
-        System.out.println(factors);
+        //System.out.println("eliminate done");
+        //System.out.println(factors);
 
         // g) 
         //multiplyFactors(factors, Q, factors); // multiply factors with only query; can we use this?
@@ -98,9 +98,11 @@ public class Main {
             int zIndex = getColIndex(sumFactor, z);
             final int nrParents = sumFactor.getNrParents();
             if (nrParents > 0) { // otherwise the table need not be summed out
+                System.out.println("Only table containing " + z + ":\n" + sumFactor);
                 for (ProbRow row : sumFactor.getTable()) { // remove the column with z
                     row.getValues().remove(zIndex);
                 }
+                System.out.println("\nTable when " + z + " is removed:\n" + sumFactor);
                 ArrayList<ProbRow> remove = new ArrayList<>();
                 for (ProbRow row : sumFactor.getTable()) {
                     for (ProbRow row2 : sumFactor.getTable()) {
