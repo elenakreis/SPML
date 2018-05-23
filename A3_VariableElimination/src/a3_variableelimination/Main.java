@@ -55,13 +55,15 @@ public class Main {
         reduceObserved(O, factors);
 
         // e)
-        ArrayList<Variable> elimOrder = eliminationOrder(Vs, Q);
+        ArrayList<Variable> elimOrder = eliminationOrder(Vs, Q); // works
 
         // f)
         eliminateVariables(elimOrder, factors);
+        System.out.println("eliminate done");
+        System.out.println(factors);
 
         // g) 
-        multiplyFactors(factors, Q, factors); // multiply factors with only query; can we use this?
+        //multiplyFactors(factors, Q, factors); // multiply factors with only query; can we use this?
         Table distribution = normalize(factors);
         return distribution;
     }
@@ -92,25 +94,42 @@ public class Main {
                 multiplyFactors(zFactors, z, factors);
             }
             // b) 
-            Table newFactor = zFactors.get(0); // the only one left
-            int zIndex = getColIndex(newFactor, z);
-            for (ProbRow row : newFactor.getTable()) { // remove the column with z
-                row.getValues().remove(zIndex);
-            }
-            ArrayList<ProbRow> remove = new ArrayList<>();
-            for (ProbRow row : newFactor.getTable()) {
-                for (ProbRow row2 : newFactor.getTable()) {
-                    if (!row.equals(row2)) {
-                        if (row.getValues().equals(row2.getValues())) { //implement this equals
-                            row.setProb(row.getProb() + row2.getProb());
-                            remove.add(row2);
+            Table sumFactor = zFactors.get(0); // the only one left
+            int zIndex = getColIndex(sumFactor, z);
+            final int nrParents = sumFactor.getNrParents();
+            if (nrParents > 0) { // otherwise the table need not be summed out
+                for (ProbRow row : sumFactor.getTable()) { // remove the column with z
+                    row.getValues().remove(zIndex);
+                }
+                ArrayList<ProbRow> remove = new ArrayList<>();
+                for (ProbRow row : sumFactor.getTable()) {
+                    for (ProbRow row2 : sumFactor.getTable()) {
+                        if (!row.equals(row2)) {
+                            if (myEquals(row.getValues(), row2.getValues())) {
+                                row.setProb(row.getProb() + row2.getProb());
+                                remove.add(row2);
+                            }
                         }
                     }
                 }
-            }
-            newFactor.getTable().removeAll(remove); // remove duplicate rows
+                sumFactor.getTable().removeAll(remove); // remove duplicate rows
+                Variable newNode;
+                ArrayList<Variable> newParents;
+                if (zIndex == nrParents) { // we removed the node
+                    newNode = sumFactor.getParents().get(nrParents - 1);
+                    sumFactor.getParents().remove(nrParents - 1);
+                    newParents = sumFactor.getParents();
+                } else { // we removed this parent: sumFactor.getParents().get(zIndex);
+                    newNode = sumFactor.getNode();
+                    sumFactor.getParents().remove(zIndex);
+                    newParents = sumFactor.getParents();
+                }
 
-            // c) is already done
+                // c)
+                Table newFactor = new Table(sumFactor.getTable(), newNode, newParents);
+                factors.add(newFactor);
+                factors.remove(sumFactor);
+            }
         }
     }
 
@@ -166,12 +185,13 @@ public class Main {
                             }
                         }
                         //posO done
-                        ArrayList<ProbRow> table = f.getTable(); // does this work? removing rows from loop?
-                        for (ProbRow row : table) {
+                        ArrayList<ProbRow> remove = new ArrayList<>();
+                        for (ProbRow row : f.getTable()) {
                             if (!row.getValues().get(posO).equals(o.getValue())) {
-                                f.getTable().remove(row);
+                                remove.add(row);
                             }
                         }
+                        f.getTable().removeAll(remove);
                     }
                 }
             }
@@ -184,7 +204,7 @@ public class Main {
         for (Variable v : Vs) {     // get a list of parents
             if (v.hasParents()) {
                 parents.addAll(v.getParents());
-            } else {
+            } else if (!v.equals(Q)) {
                 elimOrder.add(v); // add top nodes
             }
         }
@@ -209,5 +229,18 @@ public class Main {
             zIndex = table.getParents().indexOf(z);
         }
         return zIndex;
+    }
+
+    private static boolean myEquals(ArrayList<String> list1, ArrayList<String> list2) {
+        if (list1.size() != list2.size()) {
+            return false;
+        } else {
+            for (int i = 0; i < list1.size(); i++) {
+                if (!list1.get(i).equals(list2.get(i))) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

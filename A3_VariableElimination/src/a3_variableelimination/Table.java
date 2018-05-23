@@ -74,9 +74,8 @@ public class Table {
         @Override
         public String toString(){
             StringBuilder sb = new StringBuilder();
-            sb.append(node);
+            sb.append(node).append("\n");
             for (ProbRow row : table) {
-                sb.append("wat");
                 sb.append(row).append("\n");
             }
             return sb.toString();
