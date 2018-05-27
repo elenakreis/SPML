@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class Main {
 
-    private final static String networkName = "earthquake.bif"; // The network to be read in (format from http://www.bnlearn.com/bnrepository/)
+    private final static String networkName = "mildew.bif"; // The network to be read in (format from http://www.bnlearn.com/bnrepository/)
 
     public static void main(String[] args) {
 
@@ -95,50 +95,55 @@ public class Main {
             System.out.println("sumFactor = " + sumFactor);
             int zIndex = getColIndex(sumFactor, z);
             final int nrParents = sumFactor.getNrParents();
-            if (nrParents > 0) { // otherwise the table need not be summed out
-                for (ProbRow row : sumFactor.getTable()) { // remove the column with z
-                    row.getValues().remove(zIndex);
-                }
-                System.out.println("Only table containing " + z + ":\n" + sumFactor);
-                ArrayList<ProbRow> newRows = new ArrayList<>();
-                ArrayList<ProbRow> visited = new ArrayList<>();
-                for (ProbRow row : sumFactor.getTable()) {
-                    for (ProbRow row2 : sumFactor.getTable()) {
-                        if (!row.equals(row2)) { // make sure it is not summing with the row itself
-                            if (myEquals(row.getValues(),row2.getValues())&&!(visited.contains(row)||visited.contains(row2))) {
-                                row.setProb(row.getProb() + row2.getProb());
-                                newRows.add(row);
-                                
-                                visited.add(row);
-                                visited.add(row2);
-                            }
-                        }
-                    }
-                }
-                sumFactor.getTable().removeAll(visited); // remove all
-                sumFactor.getTable().addAll(newRows);
-                System.out.println("\nTable when " + z + " is removed:\n" + sumFactor);
-                
-                Variable newNode;
-                ArrayList<Variable> newParents;
-                if (zIndex == nrParents) { // we removed the node
-                    newNode = sumFactor.getParents().get(nrParents - 1);
-                    sumFactor.getParents().remove(nrParents - 1);
-                    newParents = sumFactor.getParents();
-                } else { // we removed this parent: sumFactor.getParents().get(zIndex);
-                    newNode = sumFactor.getNode();
-                    sumFactor.getParents().remove(zIndex);
-                    newParents = sumFactor.getParents();
-                }
-
-                // c)
-                Table newFactor = new Table(sumFactor.getTable(), newNode, newParents);
-                factors.add(newFactor);
-                factors.remove(sumFactor);
-                //System.out.println("FACTORS");
-                //System.out.println(factors);
+            if (nrParents > 0) {   //otherwise the table need not be summed out          
+                sumFactors(sumFactor, zIndex, z, nrParents, factors);
             }
         }
+    }
+
+    private static void sumFactors(Table sumFactor, int zIndex, Variable z, final int nrParents, ArrayList<Table> factors) {
+        
+        for (ProbRow row : sumFactor.getTable()) { // remove the column with z
+            row.getValues().remove(zIndex);
+        }
+        System.out.println("Only table containing " + z + ":\n" + sumFactor);
+        ArrayList<ProbRow> newRows = new ArrayList<>();
+        ArrayList<ProbRow> visited = new ArrayList<>();
+        for (ProbRow row : sumFactor.getTable()) {
+            for (ProbRow row2 : sumFactor.getTable()) {
+                if (!row.equals(row2)) { // make sure it is not summing with the row itself
+                    if (myEquals(row.getValues(), row2.getValues()) && !(visited.contains(row) || visited.contains(row2))) {
+                        row.setProb(row.getProb() + row2.getProb());
+                        newRows.add(row);
+                        
+                        visited.add(row);
+                        visited.add(row2);
+                    }
+                }
+            }
+        }
+        sumFactor.getTable().removeAll(visited); // remove all
+        sumFactor.getTable().addAll(newRows);
+        System.out.println("\nTable when " + z + " is removed:\n" + sumFactor);
+        
+        Variable newNode;
+        ArrayList<Variable> newParents;
+        if (zIndex == nrParents) { // we removed the node
+            newNode = sumFactor.getParents().get(nrParents - 1);
+            sumFactor.getParents().remove(nrParents - 1);
+            newParents = sumFactor.getParents();
+        } else { // we removed this parent: sumFactor.getParents().get(zIndex);
+            newNode = sumFactor.getNode();
+            sumFactor.getParents().remove(zIndex);
+            newParents = sumFactor.getParents();
+        }
+        
+        // c)
+        Table newFactor = new Table(sumFactor.getTable(), newNode, newParents);
+        factors.add(newFactor);
+        factors.remove(sumFactor);
+        //System.out.println("FACTORS");
+        //System.out.println(factors);
     }
 
     private static void multiplyFactors(ArrayList<Table> zFactors, Variable z, ArrayList<Table> factors) {
