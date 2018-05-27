@@ -56,6 +56,7 @@ public class Variable {
 	 */
 	public void setValue(String s) {
 		this.value = s;
+                values.remove(s);
 	}
 
 	/**

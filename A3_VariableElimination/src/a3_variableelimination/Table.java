@@ -74,7 +74,10 @@ public class Table {
         @Override
         public String toString(){
             StringBuilder sb = new StringBuilder();
-            sb.append(parents).append(node).append("\n");
+            if(getNrParents()>0)
+                for (Variable parent : parents) 
+                    sb.append(parent + " ");
+            sb.append(node).append("\n");
             for (ProbRow row : table) {
                 sb.append(row).append("\n");
             }

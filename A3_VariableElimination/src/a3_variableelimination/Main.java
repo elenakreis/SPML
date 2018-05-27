@@ -42,14 +42,15 @@ public class Main {
 
         //PUT YOUR CODE FOR THE VARIABLE ELIMINATION ALGORITHM HERE
         Table distribution = varelAlgorithm(Vs, Ps, Q, O);
-        System.out.println("DONE");
+        System.out.println("Variable Elimination is complete.\n" +
+                "The probability distribution for the query variable " + Q + " is");
         System.out.println(distribution);
     }
 
     private static Table varelAlgorithm(ArrayList<Variable> Vs, ArrayList<Table> factors, Variable Q, ArrayList<Variable> O) {
         // a) & b) & c) done
         // d) factorizing done;
-        //    todo: reduce observed variables
+            //reducing observed variables:
         if (O.size() > 0) {
             reduceObserved(O, factors);
         }
@@ -61,7 +62,7 @@ public class Main {
         eliminateVariables(elimOrder, factors);
 
         // g) 
-        //multiplyFactors(factors, Q, factors); // multiply factors with only query; can we use this?
+        //multiplyFactors(factors, Q, factors); // multiply factors with only query
         Table distribution = normalize(factors);
         return distribution;
     }
@@ -80,23 +81,20 @@ public class Main {
 
     private static void eliminateVariables(ArrayList<Variable> elimOrder, ArrayList<Table> factors) {
         for (Variable z : elimOrder) {
-            System.out.println("z = " + z);
             ArrayList<Table> zFactors = new ArrayList<>(); // list of factors that contain z
             for (Table factor : factors) {
                 if (factor.getNode().equals(z) || factor.getParents().contains(z)) {
                     zFactors.add(factor);
                 }
             }
-            System.out.println("zFactors = " + zFactors);
             // a)
-            if (zFactors.size() > 1) { // only multiply if theres more than one factor
+            if (zFactors.size() > 1) { // only multiply if there's more than one factor
                 multiplyFactors(zFactors, z, factors);
             }
             // b) 
             Table sumFactor = zFactors.get(0); // the only one left
-            System.out.println("sumFactor = " + sumFactor);
             final int nrParents = sumFactor.getNrParents();
-            if (nrParents > 0) {   //otherwise the table need not be summed out          
+            if (nrParents > 0) {   //otherwise the table does not need be summed out          
                 sumFactors(sumFactor, z, nrParents, factors);
             }
         }
@@ -108,7 +106,6 @@ public class Main {
         for (ProbRow row : sumFactor.getTable()) { // remove the column with z
             row.getValues().remove(zIndex);
         }
-        System.out.println("Only table containing " + z + ":\n" + sumFactor);
         ArrayList<ProbRow> newRows = new ArrayList<>();
         ArrayList<ProbRow> visited = new ArrayList<>();
         for (ProbRow row : sumFactor.getTable()) {
@@ -126,7 +123,6 @@ public class Main {
         }
         sumFactor.getTable().removeAll(visited); // remove all
         sumFactor.getTable().addAll(newRows);
-        System.out.println("\nTable when " + z + " is removed:\n" + sumFactor);
 
         Variable newNode;
         ArrayList<Variable> newParents;
@@ -144,8 +140,6 @@ public class Main {
         Table newFactor = new Table(sumFactor.getTable(), newNode, newParents);
         factors.add(newFactor);
         factors.remove(sumFactor);
-        //System.out.println("FACTORS");
-        //System.out.println(factors);
     }
 
     private static void multiplyFactors(ArrayList<Table> zFactors, Variable z, ArrayList<Table> factors) {
@@ -197,7 +191,6 @@ public class Main {
                             }
                         }
                     }
-                    //posO done
                     ArrayList<ProbRow> remove = new ArrayList<>();
                     for (ProbRow row : f.getTable()) {
                         if (!row.getValues().get(posO).equals(o.getValue())) {
@@ -212,7 +205,7 @@ public class Main {
 
     private static ArrayList<Variable> eliminationOrder(ArrayList<Variable> Vs, Variable Q) {
         ArrayList<Variable> elimOrder = new ArrayList<>();
-        ArrayList<Variable> parents = new ArrayList<>(); // make set?
+        ArrayList<Variable> parents = new ArrayList<>();
         for (Variable v : Vs) {     // get a list of parents
             if (v.hasParents()) {
                 parents.addAll(v.getParents());
@@ -221,7 +214,7 @@ public class Main {
             }
         }
         for (Variable v : Vs) {
-            if (!parents.contains(v) && !v.equals(Q)) { //make sure you dont add the query variable
+            if (!parents.contains(v) && !v.equals(Q)) { //make sure you don't add the query variable
                 elimOrder.add(0, v);     // add leaf nodes at front of list
             }
         }
