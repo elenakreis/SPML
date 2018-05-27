@@ -42,8 +42,8 @@ public class Main {
 
         //PUT YOUR CODE FOR THE VARIABLE ELIMINATION ALGORITHM HERE
         Table distribution = varelAlgorithm(Vs, Ps, Q, O);
-        System.out.println("Variable Elimination is complete.\n" +
-                "The probability distribution for the query variable " + Q + " is");
+        System.out.println("\nVariable Elimination is complete.\n" +
+                "The probability distribution for the query variable " + Q + " is:");
         System.out.println(distribution);
     }
 
