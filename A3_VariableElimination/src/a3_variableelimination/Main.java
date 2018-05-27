@@ -47,21 +47,16 @@ public class Main {
     }
 
     private static Table varelAlgorithm(ArrayList<Variable> Vs, ArrayList<Table> factors, Variable Q, ArrayList<Variable> O) {
-        // a) done
-        // b) done
-        // c) done
+        // a) & b) & c) done
         // d) factorizing done;
         //    todo: reduce observed variables
         reduceObserved(O, factors);
 
         // e)
-        ArrayList<Variable> elimOrder = eliminationOrder(Vs, Q); // works
-        
+        ArrayList<Variable> elimOrder = eliminationOrder(Vs, Q);
 
         // f)
         eliminateVariables(elimOrder, factors);
-        //System.out.println("eliminate done");
-        //System.out.println(factors);
 
         // g) 
         //multiplyFactors(factors, Q, factors); // multiply factors with only query; can we use this?
@@ -92,8 +87,7 @@ public class Main {
             }
             System.out.println("zFactors = " + zFactors);
             // a)
-            if (zFactors.size() > 1) {
-                // only multiply if theres more than one factor
+            if (zFactors.size() > 1) { // only multiply if theres more than one factor
                 multiplyFactors(zFactors, z, factors);
             }
             // b) 
