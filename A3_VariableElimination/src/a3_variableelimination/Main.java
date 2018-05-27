@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class Main {
 
-    private final static String networkName = "mildew.bif"; // The network to be read in (format from http://www.bnlearn.com/bnrepository/)
+    private final static String networkName = "earthquake.bif"; // The network to be read in (format from http://www.bnlearn.com/bnrepository/)
 
     public static void main(String[] args) {
 
@@ -50,7 +50,9 @@ public class Main {
         // a) & b) & c) done
         // d) factorizing done;
         //    todo: reduce observed variables
-        reduceObserved(O, factors);
+        if (O.size() > 0) {
+            reduceObserved(O, factors);
+        }
 
         // e)
         ArrayList<Variable> elimOrder = eliminationOrder(Vs, Q);
@@ -93,16 +95,16 @@ public class Main {
             // b) 
             Table sumFactor = zFactors.get(0); // the only one left
             System.out.println("sumFactor = " + sumFactor);
-            int zIndex = getColIndex(sumFactor, z);
             final int nrParents = sumFactor.getNrParents();
             if (nrParents > 0) {   //otherwise the table need not be summed out          
-                sumFactors(sumFactor, zIndex, z, nrParents, factors);
+                sumFactors(sumFactor, z, nrParents, factors);
             }
         }
     }
 
-    private static void sumFactors(Table sumFactor, int zIndex, Variable z, final int nrParents, ArrayList<Table> factors) {
-        
+    private static void sumFactors(Table sumFactor, Variable z, final int nrParents, ArrayList<Table> factors) {
+        int zIndex = getColIndex(sumFactor, z);
+
         for (ProbRow row : sumFactor.getTable()) { // remove the column with z
             row.getValues().remove(zIndex);
         }
@@ -115,7 +117,7 @@ public class Main {
                     if (myEquals(row.getValues(), row2.getValues()) && !(visited.contains(row) || visited.contains(row2))) {
                         row.setProb(row.getProb() + row2.getProb());
                         newRows.add(row);
-                        
+
                         visited.add(row);
                         visited.add(row2);
                     }
@@ -125,7 +127,7 @@ public class Main {
         sumFactor.getTable().removeAll(visited); // remove all
         sumFactor.getTable().addAll(newRows);
         System.out.println("\nTable when " + z + " is removed:\n" + sumFactor);
-        
+
         Variable newNode;
         ArrayList<Variable> newParents;
         if (zIndex == nrParents) { // we removed the node
@@ -137,7 +139,7 @@ public class Main {
             sumFactor.getParents().remove(zIndex);
             newParents = sumFactor.getParents();
         }
-        
+
         // c)
         Table newFactor = new Table(sumFactor.getTable(), newNode, newParents);
         factors.add(newFactor);
@@ -159,12 +161,11 @@ public class Main {
             String zValue = row.getValues().get(zIndex);
             double prob = row.getProb();
             for (Table zFactor : zFactors) {
-                if (!zFactor.equals(biggest)) { // does equal work for tables??
+                if (!zFactor.equals(biggest)) { 
                     int zIndex2 = getColIndex(zFactor, z);
                     for (ProbRow row2 : zFactor.getTable()) {
                         if (row2.getValues().get(zIndex2).equals(zValue)) {
-                            prob *= row2.getProb();
-                            break; // other tables might be large too??
+                            prob *= row2.getProb(); 
                         }
                     }
                 }
@@ -182,30 +183,28 @@ public class Main {
     }
 
     private static void reduceObserved(ArrayList<Variable> O, ArrayList<Table> factors) {
-        if (O.size() > 0) {
-            for (Variable o : O) {
-                for (Table f : factors) {
-                    if (o.equals(f.getNode()) || f.getParents().contains(o)) {
-                        // remove instances of wrong values
-                        int posO = 0;
-                        if (o.equals(f.getNode())) {
-                            posO = o.getNrOfParents(); // if a node has two parents then its values are in col 2 of the table
-                        } else {
-                            for (int i = 0; i < f.getParents().size(); i++) {
-                                if (o.equals(f.getParents().get(i))) {
-                                    posO = i;
-                                }
+        for (Variable o : O) {
+            for (Table f : factors) {
+                if (o.equals(f.getNode()) || f.getParents().contains(o)) {
+                    // remove instances of wrong values
+                    int posO = 0;
+                    if (o.equals(f.getNode())) {
+                        posO = o.getNrOfParents(); // if a node has two parents then its values are in col 2 of the table
+                    } else {
+                        for (int i = 0; i < f.getParents().size(); i++) {
+                            if (o.equals(f.getParents().get(i))) {
+                                posO = i;
                             }
                         }
-                        //posO done
-                        ArrayList<ProbRow> remove = new ArrayList<>();
-                        for (ProbRow row : f.getTable()) {
-                            if (!row.getValues().get(posO).equals(o.getValue())) {
-                                remove.add(row);
-                            }
-                        }
-                        f.getTable().removeAll(remove);
                     }
+                    //posO done
+                    ArrayList<ProbRow> remove = new ArrayList<>();
+                    for (ProbRow row : f.getTable()) {
+                        if (!row.getValues().get(posO).equals(o.getValue())) {
+                            remove.add(row);
+                        }
+                    }
+                    f.getTable().removeAll(remove);
                 }
             }
         }
