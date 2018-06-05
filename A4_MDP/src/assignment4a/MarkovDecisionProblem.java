@@ -320,7 +320,7 @@ public class MarkovDecisionProblem {
 	 */
 	public void setProbsStep(double pPerform, double pSidestep, double pBackstep, double pNoStep) {
 		double total = pPerform + pSidestep + pBackstep + pNoStep;
-		if (total == 1.0)
+		if (total != 1.0)
 			System.err.println("ERROR: MDP: setProbsStep: the given probabilities do not add up to 1. I will normalize to compensate.");
 		this.pPerform = pPerform / total;
 		this.pSidestep = pSidestep / total;
@@ -411,7 +411,7 @@ public class MarkovDecisionProblem {
 	public int getActionsCounter(){
 		return actionsCounter;
 	}
-
+        
 	/**
 	 * Returns the field with the given x and y coordinates
 	 * @param xpos, should fall within the landscape
@@ -426,6 +426,22 @@ public class MarkovDecisionProblem {
 			return Field.OUTOFBOUNDS;
 		}
 	}
+        
+        public double getPPerform(){
+            return pPerform;
+        }
+        
+        public double getPSideStep(){
+            return pSidestep;
+        }
+        
+        public double getPBackStep(){
+            return pBackstep;
+        }
+        
+        public double getPNoStep(){
+            return pNoStep;
+        }
 	
 	/////////////////////////////////////////////////////////
 	/// DISPLAY STUFF

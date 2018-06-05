@@ -12,7 +12,7 @@ public enum Action {
 	RIGHT;	// i.e. go to the field to the right
 	
 	public static Action nextAction(Action in){
-		switch(in){
+		switch(in){  
 		case UP:
 			return RIGHT;
 		case DOWN:

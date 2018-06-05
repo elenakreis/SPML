@@ -2,16 +2,21 @@ package assignment4a;
 
 /**
  * This main is for testing purposes (and to show you how to use the MDP class).
- * 
+ *
  * @author Jered Vroon
  *
  */
 public class Main {
 
-	/**
-	 * @param args, not used
-	 */
-	public static void main(String[] args) {
+    /**
+     * @param args, not used
+     */
+    public static void main(String[] args) {
+        MarkovDecisionProblem mdp = new MarkovDecisionProblem();
+        mdp.setInitialState(0, 0);
+        ValueIteration vi = new ValueIteration(mdp);
+        vi.doVI();
+        /*
 		MarkovDecisionProblem mdp = new MarkovDecisionProblem();
 		mdp.setInitialState(0, 0);
 		for (int i = 0; i < 15; i++){
@@ -31,5 +36,6 @@ public class Main {
 			mdp2.performAction(Action.DOWN);
 			mdp2.performAction(Action.LEFT);
 		}
-	}
+         */
+    }
 }
