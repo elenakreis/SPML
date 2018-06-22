@@ -427,7 +427,7 @@ public class MarkovDecisionProblem {
     }
 
     /**
-     * Returns if this MDP is determinstic
+     * Returns if this MDP is deterministic
      *
      * @return
      */
@@ -459,22 +459,6 @@ public class MarkovDecisionProblem {
             System.err.println("ERROR:MDP:getField:you request a field that does not exist!");
             return Field.OUTOFBOUNDS;
         }
-    }
-
-    public double getPPerform() {
-        return pPerform;
-    }
-
-    public double getPSideStep() {
-        return pSidestep;
-    }
-
-    public double getPBackStep() {
-        return pBackstep;
-    }
-
-    public double getPNoStep() {
-        return pNoStep;
     }
 
     /////////////////////////////////////////////////////////
@@ -556,28 +540,32 @@ public class MarkovDecisionProblem {
     }
 
     private double checkAction(Action action, int x, int y) {
-        double reward = 0;
-        switch (action) {
-            case UP:
-                if (y < (height - 1) && landscape[x][y + 1] != Field.OBSTACLE) {
-                    reward = checkReward(x, y++);
-                }
-                break;
-            case DOWN:
-                if (y > 0 && landscape[x][y - 1] != Field.OBSTACLE) {
-                    reward = checkReward(x, y--);
-                }
-                break;
-            case LEFT:
-                if (x > 0 && landscape[x - 1][y] != Field.OBSTACLE) {
-                    reward = checkReward(x--, y);
-                }
-                break;
-            case RIGHT:
-                if (x < (width - 1) && landscape[x + 1][y] != Field.OBSTACLE) {
-                    reward = checkReward(x++, y);
-                }
-                break;
+        double reward = noReward;
+        if (!isEndState(x, y)) {
+            switch (action) {
+                case UP:
+                    if (y < (height - 1) && landscape[x][y + 1] != Field.OBSTACLE) {
+                        reward = checkReward(x, y++);
+                    }
+                    break;
+                case DOWN:
+                    if (y > 0 && landscape[x][y - 1] != Field.OBSTACLE) {
+                        reward = checkReward(x, y--);
+                    }
+                    break;
+                case LEFT:
+                    if (x > 0 && landscape[x - 1][y] != Field.OBSTACLE) {
+                        reward = checkReward(x--, y);
+                    }
+                    break;
+                case RIGHT:
+                    if (x < (width - 1) && landscape[x + 1][y] != Field.OBSTACLE) {
+                        reward = checkReward(x++, y);
+                    }
+                    break;
+            }
+        } else {
+            reward = 0;
         }
         return reward;
     }
@@ -593,6 +581,16 @@ public class MarkovDecisionProblem {
                 return negReward;
         }
         return 0;
+    }
+
+    private boolean isEndState(int x, int y) {
+        switch (landscape[x][y]) {
+            case REWARD:
+            case NEGREWARD:
+                return true;
+            default:
+                return false;
+        }
     }
 
 }

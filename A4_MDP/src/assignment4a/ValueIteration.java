@@ -15,7 +15,7 @@ public class ValueIteration {
     private double[][] V;
     private double[][] oldV;
     private Action[][] pi;
-    private static final double THRESHHOLD = 0.05; // what should threshold be??
+    private static final double THRESHHOLD = 0.1; // what should threshold be??
     private int width;
     private int height;
 
@@ -29,9 +29,14 @@ public class ValueIteration {
     }
 
     public Action[][] doVI() {
-        //int k = 0;
-        while (!done()) {
-            //k++;
+        /*
+        for (int i = 0; i < height; i++) { // assign V0 arbitrarily
+            for (int j = 0; j < width; j++) {
+                V[j][i] = 2;
+            }
+            
+        }*/
+        do {
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) { // loop through states
                     double[] allQ = getQ(j, i, oldV);
@@ -39,7 +44,7 @@ public class ValueIteration {
                     V[j][i] = max(allQ); // max a of q
                 }
             }
-        }
+        } while (!done());
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) { // loop through states
                 double[] allQ = getQ(j, i, V);
@@ -67,7 +72,9 @@ public class ValueIteration {
         int index = 0;
         for (Action action : Action.values()) {
             double sum = mdp.rewardSum(action, x, y, values);
+            System.out.printf("%d %d, %s, %.2f %n", x, y, action, sum);
             qValues[index] = sum;
+            index++;
         }
         return qValues;
     }
@@ -75,6 +82,7 @@ public class ValueIteration {
     private double max(double[] array) {
         double max = array[0];
         for (int i = 1; i < array.length; i++) {
+            System.out.printf("max %.2f %n", array[i]);
             if (array[i] > max) {
                 max = array[i];
             }
@@ -86,6 +94,7 @@ public class ValueIteration {
         int index = 0;
         double max = array[0];
         for (int i = 1; i < array.length; i++) {
+            System.out.printf("argMax %.2f %n", array[i]);
             if (array[i] > max) {
                 max = array[i];
                 index = i;
