@@ -26,31 +26,10 @@ public class Main {
             int y = mdp.getStateYPostion();
             mdp.performAction(policy[x][y]);
         }
-        /*
-		MarkovDecisionProblem mdp = new MarkovDecisionProblem();
-		mdp.setInitialState(0, 0);
-		for (int i = 0; i < 15; i++){
-			mdp.performAction(Action.UP);
-			mdp.performAction(Action.UP);
-			mdp.performAction(Action.RIGHT);
-			mdp.performAction(Action.RIGHT);
-			mdp.performAction(Action.RIGHT);
-			mdp.restart();
-		}
-		
-		MarkovDecisionProblem mdp2 = new MarkovDecisionProblem(10, 10);
-		mdp2.setField(5, 5, Field.REWARD);
-		for (int i = 0; i < 100; i++){
-			mdp2.performAction(Action.UP);
-			mdp2.performAction(Action.RIGHT);
-			mdp2.performAction(Action.DOWN);
-			mdp2.performAction(Action.LEFT);
-		}
-         */
     }
     
     private static void printArray(Action[][] array){
-        for (int i = 0; i < 3; i++) {
+        for (int i = 2; i >= 0; i--) {
             for (int j = 0; j < 4; j++) {
                 System.out.print(array[j][i]+" ");
             }

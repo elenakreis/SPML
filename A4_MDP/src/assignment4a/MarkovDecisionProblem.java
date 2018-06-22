@@ -535,6 +535,7 @@ public class MarkovDecisionProblem {
             sum += (pSidestep / 2) * checkAction(Action.previousAction(action), x, y, v);
             sum += (pSidestep / 2) * checkAction(Action.nextAction(action), x, y, v);
             sum += pBackstep * checkAction(Action.backAction(action), x, y, v);
+            sum += pNoStep * (checkReward(x, y) + v[x][y]);
         }
         return sum;
     }

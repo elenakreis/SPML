@@ -106,7 +106,7 @@ public class ValueIteration {
     }
     
     private void printValues(){
-        for (int i = 0; i < 3; i++) {
+        for (int i = 2; i >= 0; i--) {
             for (int j = 0; j < 4; j++) {
                 System.out.printf("%.2f  ",V[j][i]);
             }
