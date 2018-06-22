@@ -15,7 +15,7 @@ public class ValueIteration {
     private double[][] V;
     private double[][] oldV;
     private Action[][] pi;
-    private static final double THRESHHOLD = 0.1; // what should threshold be??
+    private static final double THRESHHOLD = 0.01; // what should threshold be??
     private int width;
     private int height;
 
@@ -39,12 +39,14 @@ public class ValueIteration {
         do {
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) { // loop through states
-                    double[] allQ = getQ(j, i, oldV);
                     oldV[j][i] = V[j][i];
+                    double[] allQ = getQ(j, i, oldV);
                     V[j][i] = max(allQ); // max a of q
                 }
             }
         } while (!done());
+        printValues();
+        
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) { // loop through states
                 double[] allQ = getQ(j, i, V);
@@ -72,7 +74,7 @@ public class ValueIteration {
         int index = 0;
         for (Action action : Action.values()) {
             double sum = mdp.rewardSum(action, x, y, values);
-            System.out.printf("%d %d, %s, %.2f %n", x, y, action, sum);
+            //System.out.printf("%d %d, %s, %.2f %n", x, y, action, sum);
             qValues[index] = sum;
             index++;
         }
@@ -82,7 +84,7 @@ public class ValueIteration {
     private double max(double[] array) {
         double max = array[0];
         for (int i = 1; i < array.length; i++) {
-            System.out.printf("max %.2f %n", array[i]);
+            //System.out.printf("max %.2f %n", array[i]);
             if (array[i] > max) {
                 max = array[i];
             }
@@ -94,13 +96,22 @@ public class ValueIteration {
         int index = 0;
         double max = array[0];
         for (int i = 1; i < array.length; i++) {
-            System.out.printf("argMax %.2f %n", array[i]);
+            //System.out.printf("argMax %.2f %n", array[i]);
             if (array[i] > max) {
                 max = array[i];
                 index = i;
             }
         }
         return Action.values()[index];
+    }
+    
+    private void printValues(){
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.printf("%.2f  ",V[j][i]);
+            }
+            System.out.println("");
+        }
     }
 
 }

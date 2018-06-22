@@ -540,7 +540,7 @@ public class MarkovDecisionProblem {
     }
 
     private double checkAction(Action action, int x, int y, double[][] v) {
-        double reward = noReward;
+        double reward = noReward + v[x][y];
         if (!isEndState(x, y)) {
             switch (action) {
                 case UP:
