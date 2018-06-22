@@ -50,10 +50,9 @@ public class Main {
     }
     
     private static void printArray(Action[][] array){
-        for (int i = 0; i < array.length; i++) {
-            Action[] actions = array[i];
-            for (Action action : actions) {
-                System.out.print(action+" ");
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.print(array[j][i]+" ");
             }
             System.out.println("");
         }

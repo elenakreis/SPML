@@ -525,42 +525,46 @@ public class MarkovDecisionProblem {
     /////////////////////////////////////////////////////////
     /// OUR OWN FUNCTIONS
     /////////////////////////////////////////////////////////
-    double rewardSum(Action action, int x, int y, double[][] oldV) {
+    double rewardSum(Action action, int x, int y, double[][] v) {
         double sum = 0;
         // If we are working deterministic, the action is performed
         if (deterministic) {
-            sum += 1 * (checkAction(action, x, y) + oldV[x][y]);
+            sum += 1 * checkAction(action, x, y, v);
         } else {
-            sum += pPerform * (checkAction(action, x, y) + oldV[x][y]);
-            sum += (pSidestep / 2) * (checkAction(Action.previousAction(action), x, y) + oldV[x][y]);
-            sum += (pSidestep / 2) * (checkAction(Action.nextAction(action), x, y) + oldV[x][y]);
-            sum += pBackstep * (checkAction(Action.backAction(action), x, y) + oldV[x][y]);
+            sum += pPerform * checkAction(action, x, y, v);
+            sum += (pSidestep / 2) * checkAction(Action.previousAction(action), x, y, v);
+            sum += (pSidestep / 2) * checkAction(Action.nextAction(action), x, y, v);
+            sum += pBackstep * checkAction(Action.backAction(action), x, y, v);
         }
         return sum;
     }
 
-    private double checkAction(Action action, int x, int y) {
+    private double checkAction(Action action, int x, int y, double[][] v) {
         double reward = noReward;
         if (!isEndState(x, y)) {
             switch (action) {
                 case UP:
                     if (y < (height - 1) && landscape[x][y + 1] != Field.OBSTACLE) {
-                        reward = checkReward(x, y++);
+                        y++;
+                        reward = checkReward(x, y) + v[x][y];
                     }
                     break;
                 case DOWN:
                     if (y > 0 && landscape[x][y - 1] != Field.OBSTACLE) {
-                        reward = checkReward(x, y--);
+                        y--;
+                        reward = checkReward(x, y) + v[x][y];
                     }
                     break;
                 case LEFT:
                     if (x > 0 && landscape[x - 1][y] != Field.OBSTACLE) {
-                        reward = checkReward(x--, y);
+                        x--;
+                        reward = checkReward(x, y) + v[x][y];
                     }
                     break;
                 case RIGHT:
                     if (x < (width - 1) && landscape[x + 1][y] != Field.OBSTACLE) {
-                        reward = checkReward(x++, y);
+                        x++;
+                        reward = checkReward(x, y) + v[x][y];
                     }
                     break;
             }
