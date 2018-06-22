@@ -1,5 +1,7 @@
 package assignment4a;
 
+import java.util.Arrays;
+
 /**
  * This main is for testing purposes (and to show you how to use the MDP class).
  *
@@ -12,10 +14,18 @@ public class Main {
      * @param args, not used
      */
     public static void main(String[] args) {
+        
         MarkovDecisionProblem mdp = new MarkovDecisionProblem();
         mdp.setInitialState(0, 0);
         ValueIteration vi = new ValueIteration(mdp);
-        vi.doVI();
+        Action[][] policy = vi.doVI();
+        System.out.println("Variable iteration done!");
+        printArray(policy);
+        while(!mdp.isTerminated()){
+            int x = mdp.getStateXPosition();
+            int y = mdp.getStateYPostion();
+            mdp.performAction(policy[x][y]);
+        }
         /*
 		MarkovDecisionProblem mdp = new MarkovDecisionProblem();
 		mdp.setInitialState(0, 0);
@@ -37,5 +47,15 @@ public class Main {
 			mdp2.performAction(Action.LEFT);
 		}
          */
+    }
+    
+    private static void printArray(Action[][] array){
+        for (int i = 0; i < array.length; i++) {
+            Action[] actions = array[i];
+            for (Action action : actions) {
+                System.out.print(action+" ");
+            }
+            System.out.println("");
+        }
     }
 }
