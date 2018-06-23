@@ -1,7 +1,5 @@
 package assignment4a;
 
-import java.util.Arrays;
-
 /**
  * This main is for testing purposes (and to show you how to use the MDP class).
  *

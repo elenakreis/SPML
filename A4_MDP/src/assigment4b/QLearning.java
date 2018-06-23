@@ -13,8 +13,9 @@ import java.util.Random;
  * @author s4841670
  */
 public class QLearning {
-
-    private final static double STEPS = 20000;
+    
+    private final double[] accumulatedReward;
+    private final static int STEPS = 200000;
     private final static double LEARNING_RATE = 0.3;
     private final static double GAMMA = 1;
     private double epsilon = 1;
@@ -28,15 +29,18 @@ public class QLearning {
         width = mdp.getWidth();
         height = mdp.getHeight();
         Q = new double[width][height][Action.values().length];
+        accumulatedReward = new double[STEPS+1];
     }
 
     public void doQL() {
         int steps = 0;
         int x = mdp.getStateXPosition();
         int y = mdp.getStateYPosition();
+        accumulatedReward[0] = 0;
         do {
             Action a = selectAction(x, y);
             double r = mdp.performAction(a); //this function returns the reward
+            
             int xPrime = mdp.getStateXPosition();
             int yPrime = mdp.getStateYPosition();
             double maxPrime = max(Q[xPrime][yPrime]); // max_a' Q[s',a']
@@ -52,8 +56,9 @@ public class QLearning {
 
             update(steps);
 
-            epsilon -= 1 / STEPS;
+            epsilon -= 1 / (double)STEPS;
             steps++;
+            accumulatedReward[steps] = accumulatedReward[steps-1] + r;      
         } while (steps < STEPS);
 
     }
