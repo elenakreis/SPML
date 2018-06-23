@@ -55,15 +55,17 @@ public class QLearning {
             epsilon -= 1 / STEPS;
             steps++;
         } while (steps < STEPS);
+
     }
 
     private void update(int steps) {
 
-        if (steps % 100 == 0) {
-            System.out.println(steps + " steps");
+        if (steps % 500 == 0) {
+            //System.out.println(steps + " steps");
         }
-        if (steps == STEPS-1) {
-            printQ();
+        if (steps == STEPS - 1) {
+            System.out.println("");
+            printPolicy();
         }
     }
 
@@ -77,17 +79,6 @@ public class QLearning {
         }
     }
 
-    /*
-    private double[] getQPrime(int xPrime, int yPrime) {
-        double[] qPrimes = new double[Action.values().length];
-        int index = 0;
-        for (Action action : Action.values()) {
-            qPrimes[index] = Q[xPrime][yPrime][action.ordinal()];
-            index++;
-        }
-        return qPrimes;
-    }
-     */
     private double max(double[] array) {
         double max = array[0];
         for (int i = 1; i < array.length; i++) {
@@ -118,6 +109,15 @@ public class QLearning {
                     System.out.printf("\t %s %f\n", Action.values()[k], Q[j][i][k]);
                 }
             }
+        }
+    }
+
+    private void printPolicy() {
+        for (int i = height - 1; i >= 0; i--) {
+            for (int j = 0; j < width; j++) {
+                System.out.printf("%s\t", argMax(Q[j][i]));
+            }
+            System.out.println("");
         }
     }
 
