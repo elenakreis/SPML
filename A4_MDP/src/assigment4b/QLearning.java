@@ -23,13 +23,15 @@ public class QLearning {
     private final double[][][] Q;
     private final int width;
     private final int height;
+    private MyWriter writer;
 
-    public QLearning(MarkovDecisionProblem mdp) {
+    public QLearning(MarkovDecisionProblem mdp, String fileName) {
         this.mdp = mdp;
         width = mdp.getWidth();
         height = mdp.getHeight();
         Q = new double[width][height][Action.values().length];
         accumulatedReward = new double[STEPS+1];
+        writer = new MyWriter(fileName);
     }
 
     public void doQL() {
@@ -60,6 +62,8 @@ public class QLearning {
             steps++;
             accumulatedReward[steps] = accumulatedReward[steps-1] + r;      
         } while (steps < STEPS);
+        
+        writer.write(accumulatedReward);
 
     }
 

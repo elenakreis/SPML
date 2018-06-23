@@ -138,7 +138,7 @@ public class MarkovDecisionProblem {
         terminated = false;
 
         waittime = 500;
-        showProgress = false;
+        showProgress = true;
 
         actionsCounter = 0;
     }
