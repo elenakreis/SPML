@@ -14,26 +14,16 @@ public class Main {
      * @param args, not used
      */
     public static void main(String[] args) {
-        
         MarkovDecisionProblem mdp = new MarkovDecisionProblem();
         mdp.setInitialState(0, 0);
         ValueIteration vi = new ValueIteration(mdp);
         Action[][] policy = vi.doVI();
         System.out.println("Variable iteration done!");
-        printArray(policy);
+
         while(!mdp.isTerminated()){
             int x = mdp.getStateXPosition();
-            int y = mdp.getStateYPostion();
+            int y = mdp.getStateYPosition();
             mdp.performAction(policy[x][y]);
-        }
-    }
-    
-    private static void printArray(Action[][] array){
-        for (int i = 2; i >= 0; i--) {
-            for (int j = 0; j < 4; j++) {
-                System.out.print(array[j][i]+" ");
-            }
-            System.out.println("");
         }
     }
 }

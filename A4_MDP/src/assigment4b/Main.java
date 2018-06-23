@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package assigment4b;
+import assignment4a.*;
 
 /**
  *
@@ -11,6 +12,9 @@ package assigment4b;
  */
 public class Main {
     public static void main(String[] args) {
-        //izzy forced me
+        MarkovDecisionProblem mdp = new MarkovDecisionProblem();
+        mdp.setInitialState(0, 0);
+        QLearning ql = new QLearning(mdp);
+        ql.doQL();
     }
 }

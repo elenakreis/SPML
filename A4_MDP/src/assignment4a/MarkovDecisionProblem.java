@@ -394,7 +394,7 @@ public class MarkovDecisionProblem {
      *
      * @return a number between 1 and height
      */
-    public int getStateYPostion() {
+    public int getStateYPosition() {
         return yPosition;
     }
 
@@ -588,7 +588,7 @@ public class MarkovDecisionProblem {
         return 0;
     }
 
-    private boolean isEndState(int x, int y) {
+    public boolean isEndState(int x, int y) {
         switch (landscape[x][y]) {
             case REWARD:
             case NEGREWARD:

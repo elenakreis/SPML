@@ -11,13 +11,14 @@ package assignment4a;
  */
 public class ValueIteration {
 
-    private MarkovDecisionProblem mdp;
-    private double[][] V;
-    private double[][] oldV;
-    private Action[][] pi;
+    private final MarkovDecisionProblem mdp;
+    private final double[][] V;
+    private final double[][] oldV;
+    private final Action[][] pi;
     private static final double THRESHHOLD = 0.01; // what should threshold be??
-    private int width;
-    private int height;
+    private static final double GAMMA = 1; //use this
+    private final int width;
+    private final int height;
 
     public ValueIteration(MarkovDecisionProblem mdp) {
         this.mdp = mdp;
@@ -29,13 +30,6 @@ public class ValueIteration {
     }
 
     public Action[][] doVI() {
-        /*
-        for (int i = 0; i < height; i++) { // assign V0 arbitrarily
-            for (int j = 0; j < width; j++) {
-                V[j][i] = 2;
-            }
-            
-        }*/
         do {
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) { // loop through states
@@ -53,6 +47,7 @@ public class ValueIteration {
                 pi[j][i] = argMax(allQ);
             }
         }
+        printPolicy();
         return pi;
 
     }
@@ -106,9 +101,18 @@ public class ValueIteration {
     }
     
     private void printValues(){
-        for (int i = 2; i >= 0; i--) {
-            for (int j = 0; j < 4; j++) {
+        for (int i = height-1; i >= 0; i--) {
+            for (int j = 0; j < width; j++) {
                 System.out.printf("%.2f  ",V[j][i]);
+            }
+            System.out.println("");
+        }
+    }
+    
+    private void printPolicy(){
+        for (int i = height-1; i >= 0; i--) {
+            for (int j = 0; j < width; j++) {
+                System.out.print(pi[j][i]+"\t");
             }
             System.out.println("");
         }
