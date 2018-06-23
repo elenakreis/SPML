@@ -62,7 +62,7 @@ public class DrawPanel extends JPanel {
 				g2.drawRect(stepSizeX*i, screenHeight - stepSizeY*(j+1), stepSizeX,stepSizeY);
 			}			
 		}
-		g2.drawString("Reward: \t\t"+mdp.getReward(), 30, screenHeight+25);
+		//g2.drawString("Reward: \t\t"+mdp.getReward(), 30, screenHeight+25);
 		g2.drawString("#Actions: \t\t"+mdp.getActionsCounter(), 30, screenHeight+40);
 	}
 

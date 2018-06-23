@@ -14,8 +14,8 @@ import java.util.Random;
  */
 public class QLearning {
 
-    private final static double STEPS = 2000;
-    private final static double STEPSIZE = 0.3;
+    private final static double STEPS = 20000;
+    private final static double LEARNING_RATE = 0.3;
     private final static double GAMMA = 1;
     private double epsilon = 1;
     private final MarkovDecisionProblem mdp;
@@ -36,16 +36,13 @@ public class QLearning {
         int y = mdp.getStateYPosition();
         do {
             Action a = selectAction(x, y);
-            mdp.performAction(a);
+            double r = mdp.performAction(a); //this function returns the reward
             int xPrime = mdp.getStateXPosition();
             int yPrime = mdp.getStateYPosition();
-            double r = mdp.getReward();
             double maxPrime = max(Q[xPrime][yPrime]); // max_a' Q[s',a']
-            if (!mdp.isEndState(x, y)) {
-                Q[x][y][a.ordinal()] += STEPSIZE * (r + GAMMA * maxPrime - Q[x][y][a.ordinal()]);
-            }
+            Q[x][y][a.ordinal()] += LEARNING_RATE * (r + GAMMA * maxPrime - Q[x][y][a.ordinal()]);
 
-            if (mdp.isEndState(xPrime, yPrime)) {
+            if (mdp.isTerminated()) { // restart to reset reward
                 mdp.restart();
                 xPrime = mdp.getStateXPosition();
                 yPrime = mdp.getStateYPosition();
@@ -61,10 +58,11 @@ public class QLearning {
     }
 
     private void update(int steps) {
-        if (steps % 25 == 0) {
-            System.out.println(steps);
+
+        if (steps % 100 == 0) {
+            System.out.println(steps + " steps");
         }
-        if (steps == 1000) {
+        if (steps == STEPS-1) {
             printQ();
         }
     }
@@ -90,7 +88,6 @@ public class QLearning {
         return qPrimes;
     }
      */
-
     private double max(double[] array) {
         double max = array[0];
         for (int i = 1; i < array.length; i++) {

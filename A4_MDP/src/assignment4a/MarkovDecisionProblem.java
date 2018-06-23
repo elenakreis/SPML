@@ -138,7 +138,7 @@ public class MarkovDecisionProblem {
         terminated = false;
 
         waittime = 500;
-        showProgress = true;
+        showProgress = false;
 
         actionsCounter = 0;
     }
@@ -525,6 +525,7 @@ public class MarkovDecisionProblem {
     /////////////////////////////////////////////////////////
     /// OUR OWN FUNCTIONS
     /////////////////////////////////////////////////////////
+    
     double rewardSum(Action action, int x, int y, double[][] v) {
         double sum = 0;
         // If we are working deterministic, the action is performed
@@ -596,6 +597,12 @@ public class MarkovDecisionProblem {
             default:
                 return false;
         }
+    }
+    
+    public void ourRestart(){
+        terminated = false;
+        xPosition = initXPos;
+        yPosition = initYPos;
     }
 
 }
