@@ -53,8 +53,10 @@ public class TestFactory {
     
     public MarkovDecisionProblem discount1(){
         MarkovDecisionProblem mdp = new MarkovDecisionProblem();
-        // set discount
+        mdp.setGAMMA(0.9);
         return mdp;
     }
+    
+    // ...
 
 }

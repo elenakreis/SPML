@@ -15,9 +15,9 @@ import java.util.Random;
 public class QLearning {
     
     private final double[] accumulatedReward;
-    private final static int STEPS = 200000;
-    private final static double LEARNING_RATE = 0.3;
-    private final static double GAMMA = 1;
+    private final int STEPS = 200000;
+    private final double LEARNING_RATE = 0.3;
+    private final double GAMMA;
     private double epsilon = 1;
     private final MarkovDecisionProblem mdp;
     private final double[][][] Q;
@@ -32,6 +32,7 @@ public class QLearning {
         Q = new double[width][height][Action.values().length];
         accumulatedReward = new double[STEPS+1];
         writer = new MyWriter(fileName);
+        GAMMA = mdp.getGAMMA();
     }
 
     public void doQL() {

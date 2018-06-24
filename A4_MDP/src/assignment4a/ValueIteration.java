@@ -16,7 +16,7 @@ public class ValueIteration {
     private final double[][] oldV;
     private final Action[][] pi;
     private static final double THRESHHOLD = 0.01; // what should threshold be??
-    private static final double GAMMA = 1; //use this
+    private static final double GAMMA = 1; // use this
     private final int width;
     private final int height;
 

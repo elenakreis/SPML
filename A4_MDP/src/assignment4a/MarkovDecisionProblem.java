@@ -60,6 +60,8 @@ public class MarkovDecisionProblem {
 
     // Counts the number of actions that has been performed
     private int actionsCounter = 0;
+    
+    private double GAMMA = 1;
 
     /////////////////////////////////////////////////////////
     /// FUNCTIONS
@@ -141,6 +143,8 @@ public class MarkovDecisionProblem {
         showProgress = true;
 
         actionsCounter = 0;
+        
+        GAMMA = 1;
     }
 
     /**
@@ -376,6 +380,10 @@ public class MarkovDecisionProblem {
     public void setNoReward(double noReward) {
         this.noReward = noReward;
     }
+    
+    public void setGAMMA(double GAMMA){
+        this.GAMMA = GAMMA;
+    }
 
     /////////////////////////////////////////////////////////
     /// GETTERS
@@ -396,6 +404,10 @@ public class MarkovDecisionProblem {
      */
     public int getStateYPosition() {
         return yPosition;
+    }
+    
+    public double getGAMMA(){
+        return GAMMA;
     }
 
     /**
@@ -536,37 +548,37 @@ public class MarkovDecisionProblem {
             sum += (pSidestep / 2) * checkAction(Action.previousAction(action), x, y, v);
             sum += (pSidestep / 2) * checkAction(Action.nextAction(action), x, y, v);
             sum += pBackstep * checkAction(Action.backAction(action), x, y, v);
-            sum += pNoStep * (checkReward(x, y) + v[x][y]);
+            sum += pNoStep * (checkReward(x, y) + GAMMA*v[x][y]);
         }
         return sum;
     }
 
     private double checkAction(Action action, int x, int y, double[][] v) {
-        double reward = noReward + v[x][y];
+        double reward = noReward + GAMMA*v[x][y];
         if (!isEndState(x, y)) {
             switch (action) {
                 case UP:
                     if (y < (height - 1) && landscape[x][y + 1] != Field.OBSTACLE) {
                         y++;
-                        reward = checkReward(x, y) + v[x][y];
+                        reward = checkReward(x, y) + GAMMA*v[x][y];
                     }
                     break;
                 case DOWN:
                     if (y > 0 && landscape[x][y - 1] != Field.OBSTACLE) {
                         y--;
-                        reward = checkReward(x, y) + v[x][y];
+                        reward = checkReward(x, y) + GAMMA*v[x][y];
                     }
                     break;
                 case LEFT:
                     if (x > 0 && landscape[x - 1][y] != Field.OBSTACLE) {
                         x--;
-                        reward = checkReward(x, y) + v[x][y];
+                        reward = checkReward(x, y) + GAMMA*v[x][y];
                     }
                     break;
                 case RIGHT:
                     if (x < (width - 1) && landscape[x + 1][y] != Field.OBSTACLE) {
                         x++;
-                        reward = checkReward(x, y) + v[x][y];
+                        reward = checkReward(x, y) + GAMMA*v[x][y];
                     }
                     break;
             }
@@ -597,12 +609,6 @@ public class MarkovDecisionProblem {
             default:
                 return false;
         }
-    }
-    
-    public void ourRestart(){
-        terminated = false;
-        xPosition = initXPos;
-        yPosition = initYPos;
     }
 
 }
