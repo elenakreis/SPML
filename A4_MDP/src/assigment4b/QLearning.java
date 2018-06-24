@@ -16,7 +16,7 @@ public class QLearning {
     
     private final double[] accumulatedReward;
     private final int STEPS = 200000;
-    private final double LEARNING_RATE = 0.3;
+    private double learningRate;
     private final double GAMMA;
     private double epsilon = 1;
     private final MarkovDecisionProblem mdp;
@@ -33,6 +33,11 @@ public class QLearning {
         accumulatedReward = new double[STEPS+1];
         writer = new MyWriter(fileName);
         GAMMA = mdp.getGAMMA();
+        learningRate = 0.3;
+    }
+    
+    public void setLearningRate(double learningRate){
+        this.learningRate = learningRate;
     }
 
     public void doQL() {
@@ -47,7 +52,7 @@ public class QLearning {
             int xPrime = mdp.getStateXPosition();
             int yPrime = mdp.getStateYPosition();
             double maxPrime = max(Q[xPrime][yPrime]); // max_a' Q[s',a']
-            Q[x][y][a.ordinal()] += LEARNING_RATE * (r + GAMMA * maxPrime - Q[x][y][a.ordinal()]);
+            Q[x][y][a.ordinal()] += learningRate * (r + GAMMA * maxPrime - Q[x][y][a.ordinal()]);
 
             if (mdp.isTerminated()) { // restart to reset reward
                 mdp.restart();

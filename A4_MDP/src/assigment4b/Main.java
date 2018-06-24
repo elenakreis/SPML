@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
         TestFactory tf = new TestFactory();
         MarkovDecisionProblem mdp = tf.defaultMDP();
-        QLearning ql = new QLearning(mdp,"regular");
+        QLearning ql = new QLearning(mdp,"test2");
         ql.doQL();
         
     }

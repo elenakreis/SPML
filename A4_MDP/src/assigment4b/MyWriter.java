@@ -19,7 +19,7 @@ public class MyWriter {
 
     public MyWriter(String fileName) {
         try {
-            writer = new FileWriter(String.format("C:\\Users\\Elena\\Documents\\Uni\\Search, Planning & Machine Learning\\A4 test data\\%s.xls",fileName));
+            writer = new FileWriter(String.format("D:\\Radboud University\\2nd year\\SPML\\Assignment 4\\%s.xls",fileName));
 
             
         } catch (IOException e) {
