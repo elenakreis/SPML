@@ -14,9 +14,8 @@ public class ValueIteration {
     private final MarkovDecisionProblem mdp;
     private final double[][] V;
     private final double[][] oldV;
-    private final Action[][] pi;
+    private final Action[][] policy;
     private static final double THRESHHOLD = 0.01; // what should threshold be??
-    private static final double GAMMA = 1; // use this
     private final int width;
     private final int height;
 
@@ -26,7 +25,7 @@ public class ValueIteration {
         height = mdp.getHeight();
         V = new double[width][height];
         oldV = new double[width][height];
-        pi = new Action[width][height];
+        policy = new Action[width][height];
     }
 
     public Action[][] doVI() {
@@ -35,7 +34,7 @@ public class ValueIteration {
                 for (int j = 0; j < width; j++) { // loop through states
                     oldV[j][i] = V[j][i];
                     double[] allQ = getQ(j, i, oldV);
-                    V[j][i] = max(allQ); // max a of q
+                    V[j][i] = max(allQ); // max of q
                 }
             }
         } while (!done());
@@ -44,11 +43,11 @@ public class ValueIteration {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) { // loop through states
                 double[] allQ = getQ(j, i, V);
-                pi[j][i] = argMax(allQ);
+                policy[j][i] = argMax(allQ);
             }
         }
         printPolicy();
-        return pi;
+        return policy;
 
     }
 
@@ -69,7 +68,6 @@ public class ValueIteration {
         int index = 0;
         for (Action action : Action.values()) {
             double sum = mdp.rewardSum(action, x, y, values);
-            //System.out.printf("%d %d, %s, %.2f %n", x, y, action, sum);
             qValues[index] = sum;
             index++;
         }
@@ -112,7 +110,7 @@ public class ValueIteration {
     private void printPolicy(){
         for (int i = height-1; i >= 0; i--) {
             for (int j = 0; j < width; j++) {
-                System.out.print(pi[j][i]+"\t");
+                System.out.print(policy[j][i]+"\t");
             }
             System.out.println("");
         }

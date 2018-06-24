@@ -13,7 +13,7 @@ public class Main {
      */
     public static void main(String[] args) {
         TestFactory tf = new TestFactory();
-        MarkovDecisionProblem mdp = tf.defaultMDP();
+        MarkovDecisionProblem mdp = tf.world4();
         
         ValueIteration vi = new ValueIteration(mdp);
         Action[][] policy = vi.doVI();

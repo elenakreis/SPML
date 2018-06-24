@@ -29,7 +29,7 @@ public class QLearning {
         this.mdp = mdp;
         width = mdp.getWidth();
         height = mdp.getHeight();
-        Q = new double[width][height][Action.values().length];
+        Q = new double[width][height][Action.values().length]; // Q[S][A]
         accumulatedReward = new double[STEPS+1];
         writer = new MyWriter(fileName);
         GAMMA = mdp.getGAMMA();
