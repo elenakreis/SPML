@@ -12,11 +12,11 @@ public class Main {
      * @param args, not used
      */
     public static void main(String[] args) {
-        MarkovDecisionProblem mdp = new MarkovDecisionProblem();
-        mdp.setInitialState(0, 0);
+        TestFactory tf = new TestFactory();
+        MarkovDecisionProblem mdp = tf.defaultMDP();
+        
         ValueIteration vi = new ValueIteration(mdp);
         Action[][] policy = vi.doVI();
-        System.out.println("Variable iteration done!");
 
         while(!mdp.isTerminated()){
             int x = mdp.getStateXPosition();

@@ -14,10 +14,9 @@ import assignment4a.*;
 public class Main {
 
     public static void main(String[] args) {
-        
-        MarkovDecisionProblem mdp = TestCase.TC5.getMDP();
-        //mdp.setInitialState(0, 0);        
-        QLearning ql = new QLearning(mdp,"regular5");
+        TestFactory tf = new TestFactory();
+        MarkovDecisionProblem mdp = tf.defaultMDP();
+        QLearning ql = new QLearning(mdp,"regular");
         ql.doQL();
         
     }
