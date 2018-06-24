@@ -57,6 +57,41 @@ public class TestFactory {
         return mdp;
     }
     
-    // ...
+    public MarkovDecisionProblem discount2(){
+        MarkovDecisionProblem mdp = new MarkovDecisionProblem();
+        mdp.setGAMMA(0.1);
+        return mdp;
+    }
+    
+    public MarkovDecisionProblem statePenalty1(){
+        MarkovDecisionProblem mdp = new MarkovDecisionProblem();
+        mdp.setNoReward(0);
+        return mdp;
+    }
+    
+    public MarkovDecisionProblem statePenalty2(){
+        MarkovDecisionProblem mdp = new MarkovDecisionProblem();
+        mdp.setNoReward(-0.01);
+        return mdp;
+    }
+    
+    public MarkovDecisionProblem statePenalty3(){
+        MarkovDecisionProblem mdp = new MarkovDecisionProblem();
+        mdp.setNoReward(-0.1);
+        return mdp;
+    }
+    
+    public MarkovDecisionProblem transitionProb1(){
+        MarkovDecisionProblem mdp = new MarkovDecisionProblem();
+        mdp.setDeterministic();
+        return mdp;
+    }
+    
+    public MarkovDecisionProblem transitionProb2(){
+        MarkovDecisionProblem mdp = new MarkovDecisionProblem();
+        mdp.setProbsStep(0.5, 0.5, 0, 0);
+        return mdp;
+    }
+    
 
 }
